@@ -1,16 +1,29 @@
-# -*- coding: utf-8 -*-
+# -*- coding: latin-1 -*-
+
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
 from models import UserProfile
 from forms import UserProfileSignupForm
+from vpsa import VpsaApi
 
-class UserTestCase(TestCase):
-    def test_basic_addition(self):
+class VpsaApiTestCase(TestCase):
+    def test_valid_database(self):
         """
-        Tests that 1 + 1 always equals 2.
+        Testa se o database informado a 
+        API VPSA é valida.
         """
-        self.assertEqual(1 + 1, 2)
+        vpsa = VpsaApi('showroom')
+        self.assertEqual(vpsa.get_base_url_api(), 'https://www.vpsa.com.br/vpsa/rest/externo/showroom/')
+        self.assertTrue(vpsa.is_valid_database())
+
+    def test_invalid_database(self):
+        """
+        Testa se o database informado a 
+        API VPSA é valida.
+        """
+        vpsa = VpsaApi('base_exemplo')
+        self.assertFalse(vpsa.is_valid_database())
 
 class UserProfileSignupFormTestCase(TestCase):
     def setUp(self):
@@ -20,65 +33,74 @@ class UserProfileSignupFormTestCase(TestCase):
         user.save()
         self.demo = UserProfile.objects.create(user=user, database="showroom")
 
-    def test_formulario_invalido_quando_username_menor_min_length(self):
+    def test_invalid_form_when_username_lower_than_min_length(self):
         signup_form = UserProfileSignupForm({
-            'username': u'de',
-            'password': u'teste', 
-            'password_confirm': u'teste', 
+            'username': 'de',
+            'password': 'teste', 
+            'password_confirm': 'teste', 
             'database': 'teste'
         })
         self.assertFalse(signup_form.is_valid())
-        
-    def test_formulario_invalido_quando_username_ja_cadastrado(self):
+
+    def test_invalid_form_when_username_already_taken(self):
         signup_form = UserProfileSignupForm({
-            'username': u'demo',
-            'password': u'teste', 
-            'password_confirm': u'teste', 
+            'username': 'demo',
+            'password': 'teste', 
+            'password_confirm': 'teste', 
+            'database': 'teste'
+        })
+        self.assertFalse(signup_form.is_valid())
+
+    def test_invalid_form_when_username_contains_special_characters(self):
+        signup_form = UserProfileSignupForm({
+            'username': 'demonstração#$%',
+            'password': 'teste', 
+            'password_confirm': 'teste', 
             'database': 'teste'
         })
         self.assertFalse(signup_form.is_valid())
 
     def test_formulario_invalido_quando_password_menor_min_length(self):
         signup_form = UserProfileSignupForm({
-            'username': u'usuario1',
-            'password': u'12', 
-            'password_confirm': u'654321', 
+            'username': 'usuario1',
+            'password': '12', 
+            'password_confirm': '654321', 
             'database': 'teste'
         })
         self.assertFalse(signup_form.is_valid())
 
     def test_formulario_invalido_quando_password_confirm_menor_min_length(self):
         signup_form = UserProfileSignupForm({
-            'username': u'usuario1',
-            'password': u'123456', 
-            'password_confirm': u'65', 
+            'username': 'usuario1',
+            'password': '123456', 
+            'password_confirm': '65', 
             'database': 'teste'
         })
         self.assertFalse(signup_form.is_valid())
         
     def test_formulario_invalido_quando_senhas_nao_coincidirem(self):
         signup_form = UserProfileSignupForm({
-            'username': u'usuario1',
-            'password': u'123456', 
-            'password_confirm': u'654321', 
+            'username': 'usuario1',
+            'password': '123456', 
+            'password_confirm': '654321', 
             'database': 'teste'
         })
         self.assertFalse(signup_form.is_valid())
 
     def test_formulario_invalido_quando_database_ja_cadastrado(self):
         signup_form = UserProfileSignupForm({
-            'username': u'usuario1',
-            'password': u'123456', 
-            'password_confirm': u'654321', 
+            'username': 'usuario1',
+            'password': '123456', 
+            'password_confirm': '654321', 
             'database': 'showroom'
         })
         self.assertFalse(signup_form.is_valid())
 
     def test_formulario_valido(self):
         signup_form = UserProfileSignupForm({
-            'username': u'usuario1',
-            'password': u'123456', 
-            'password_confirm': u'123456', 
+            'username': 'usuario1',
+            'password': '123456', 
+            'password_confirm': '123456', 
             'database': 'base_exemplo'
         })
         self.assertTrue(signup_form.is_valid())
@@ -108,9 +130,9 @@ class ControllerTestCase(TestCase):
         """
         client = Client(enforce_csrf_checks=True)
         response = client.post('/cadastro/', {
-            'username': u'usuario1',
-            'password': u'123456', 
-            'password_confirm': u'654321', 
+            'username': 'usuario1',
+            'password': '123456', 
+            'password_confirm': '654321', 
             'database': 'showroom'
         })
 

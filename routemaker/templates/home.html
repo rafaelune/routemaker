@@ -1,38 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-BR">
-	<head>
-		<title>VPSA - Route Maker</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-		<meta content="Route Maker, VPSA, VPSA API" name="keywords" />
-		<meta content="VPSA - Route Maker." name="description" />
-		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Convergence|Bitter|Droid+Sans" />
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/styles.css" />
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}js/util.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				util.createExternalLinks();
-			});
-		</script> 
-	</head>
-	<body>
-		<header>
-			<h1><a href="{% url routemaker.views.index %}" title="Home">VPSA - Route Maker</a></h1>
-			<nav>
-				<ul>
-					<li>Link 1</li>
-					<li>Link 2</li>
-				</ul>
-			</nav>
-		</header>
-		<section>
-			<header>
-				<h2>Descricao</h2>
-			</header>
-			Lorem ipsum dolor sit anet doque valuem integer nobaque.
-			<a href="/cadastro/" title="Cadastro">Cadastro</a>
-		</section>
-		<footer>
-		</footer>
-	</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}VPSA - Route Maker{% endblock %}
+
+{% block content %}
+<h2>Bem vindo {{ user.username }},</h2>
+{{ user_profile.database }}
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        util.createExternalLinks();
+    });
+</script> 
+{% endblock %}

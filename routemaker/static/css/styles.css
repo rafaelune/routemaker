@@ -7,10 +7,7 @@ body{
 
 h1{
   font-family: 'Convergence';
-  font-size: 95px;
   text-align: center;
-  letter-spacing: -6px;
-  margin: 8px 0;
   text-shadow: 0 0 1px #000;
 }
 h2{
@@ -27,4 +24,8 @@ p.big{
   font-family:'Droid Sans';
   font-size:24px;
   color:#333;
+  margin: 20px 0 50px 0;
+}
+footer p{
+    text-align: center;
 }

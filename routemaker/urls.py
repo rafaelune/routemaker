@@ -16,10 +16,15 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    # Pagina principal
+    (r'^home/$', 'routemaker.views.home'),
+
     # Form de cadastro
-    (r'^cadastro/$', 'routemaker.views.cadastro'),
+    (r'^cadastro/$', 'routemaker.views.signup'),
+
     # Form de login
-    (r'^login/$', 'routemaker.views.login'),
+    (r'^login/$', 'routemaker.views.log_in'),
+
     # Homepage
     (r'^$', 'routemaker.views.index'),
 )
