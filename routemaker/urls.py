@@ -25,6 +25,9 @@ urlpatterns = patterns('',
     # Form de login
     (r'^login/$', 'routemaker.views.log_in'),
 
+    # Logout url
+    (r'^logout/$', 'routemaker.views.log_out'),
+
     # Homepage
     (r'^$', 'routemaker.views.index'),
 )
