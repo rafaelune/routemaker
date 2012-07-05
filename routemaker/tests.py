@@ -14,7 +14,7 @@ class VpsaApiTestCase(TestCase):
         API VPSA é valida.
         """
         vpsa = VpsaApi('showroom')
-        self.assertEqual(vpsa.get_base_url_api(), 'https://www.vpsa.com.br/vpsa/rest/externo/showroom/')
+        self.assertEqual(vpsa.get_base_url_api('vpsa'), 'https://www.vpsa.com.br/vpsa/rest/externo/showroom/')
         self.assertTrue(vpsa.is_valid_database())
 
     def test_invalid_database(self):
@@ -31,6 +31,14 @@ class VpsaApiTestCase(TestCase):
         """
         vpsa = VpsaApi('showroom')
         self.assertTrue(len(vpsa.get_entidades()) > 0)
+
+    def test_retorno_pedidos(self):
+        """
+        Testa o retorno de um pedido.
+        """
+        vpsa = VpsaApi('showroom')
+        self.assertEqual(vpsa.get_base_url_api('estoque'), 'https://www.vpsa.com.br/estoque/rest/externo/showroom/')
+        self.assertTrue(len(vpsa.get_pedidos(10)) > 0)
 
 class UserProfileSignupFormTestCase(TestCase):
     def setUp(self):
