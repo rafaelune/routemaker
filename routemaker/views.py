@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.conf import settings
-from forms import UserProfileSignupForm, UserProfileLoginForm
+from forms import FilterPedidoForm, UserProfileSignupForm, UserProfileLoginForm
 from models import UserProfile
 from vpsa import VpsaApi
 import urllib3
@@ -78,6 +78,7 @@ def home(request):
     user_profile = request.user.get_profile()
     
     vpsa = VpsaApi(user_profile.database)
+    form = FilterPedidoForm(database=user_profile.database)
     
     return render_to_response('home.html', 
         locals(), 

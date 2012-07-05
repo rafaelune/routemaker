@@ -1,10 +1,31 @@
-{% extends "base.html" %}
+{% extends "base-fluid.html" %}
 
 {% block title %}VPSA - Route Maker{% endblock %}
 
 {% block content %}
-<h2>Bem vindo {{ user.username }},</h2>
-{{ user_profile.database }}
+<div class="row-fluid" style="padding-top: 50px;">
+    <div class="span2">
+        <div class="member-box round-all">
+            <strong>{{ user_profile.database }}</strong>
+            <a>{{ user.username }}</a>
+        </div>
+    </div>
+    
+    <div class="span2">
+        <form class="well form-inline">
+        {% for field in form %}
+            {{ field }}
+        {% endfor %}
+<!--<input type="text" class="input-small" placeholder="Email">
+<input type="password" class="input-small" placeholder="Password">
+<label class="checkbox">
+<input type="checkbox"> Remember me
+</label>
+<button type="submit" class="btn">Sign in</button>-->
+            <button type="submit" class="btn">Filtrar</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
 

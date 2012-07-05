@@ -6,6 +6,19 @@ from models import UserProfile
 from vpsa import VpsaApi
 import re
 
+def get_entidades_choices(database):
+    
+    return 
+
+class FilterPedidoForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        database = kwargs.pop('database')
+        super(FilterPedidoForm, self).__init__(*args, **kwargs)
+        vpsa = VpsaApi(database)
+        self.fields['entidade'].choices = [(ent.id, ent.nome) for ent in vpsa.get_entidades()]
+    
+    entidade = forms.ChoiceField(choices=())
+
 class UserProfileLoginForm(forms.Form):
     username = forms.RegexField(label='Nome de usuário', required=True,
         regex=r'^[a-zA-Z0-9_.-]+$', error_messages={'invalid': 'Apenas caracteres, dígitos, "_", "-" e ".".'}
