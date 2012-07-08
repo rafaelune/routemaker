@@ -12,7 +12,7 @@
     </div>
     
     <div class="span2">
-        <form class="well form-inline">
+        <form id="filterForm" action="{% url routemaker.views.pedidos_search %}" method="post" class="well form-inline">{% csrf_token %}
         {% for field in form %}
             {{ field }}
         {% endfor %}
@@ -25,15 +25,34 @@
             <button type="submit" class="btn">Filtrar</button>
         </form>
     </div>
+    
+    <div id="pedidos-placeholder">
+    </div>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         util.createExternalLinks();
         util.configUserMenuOptions();
+        
+        // prepare Options Object 
+        var options = { 
+            target:     '#pedidos-placeholder', 
+            url:        '/filtro/', 
+            success:    function() { 
+                //alert('Thanks for your comment!'); 
+                $('#pedidos-placeholder').sortable();
+                $('#pedidos-placeholder').disableSelection();
+            } 
+        };
+        // pass options to ajaxForm 
+        $('#filterForm').ajaxForm(options);
+
     });
 </script> 
 {% endblock %}

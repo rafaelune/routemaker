@@ -6,10 +6,6 @@ from models import UserProfile
 from vpsa import VpsaApi
 import re
 
-def get_entidades_choices(database):
-    
-    return 
-
 class FilterPedidoForm(forms.Form):
     def __init__(self, *args, **kwargs):
         database = kwargs.pop('database')

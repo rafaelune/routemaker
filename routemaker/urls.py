@@ -16,6 +16,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    # Ajax filtro de pedidos
+    (r'^filtro/$', 'routemaker.views.pedidos_search'),
+
     # Pagina principal
     (r'^home/$', 'routemaker.views.home'),
 
