@@ -1,5 +1,5 @@
 {% for pedido in pedidos %}
-    <div id="{{ pedido.id }}">
+    <div id="{{ pedido.id }}" class="ui-state-default sortable-item box">
         {{ pedido.numero }}
         {{ pedido.valor_total }}
     </div>

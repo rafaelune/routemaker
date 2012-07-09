@@ -94,9 +94,8 @@ def pedidos_search(request):
     if request.method == 'POST':
         entidade = request.POST.get('entidade')
         
-        #entidade = form.cleaned_data['entidade']
         pedidos = vpsa.get_pedidos(entidade)
-    
+        
         return render_to_response('ajax/filter-result.html', 
             locals(), 
             context_instance=RequestContext(request)

@@ -26,6 +26,39 @@ p.big{
   color:#333;
   margin: 20px 0 50px 0;
 }
+/* User database */
+.database-user {
+    display: block;
+}
+/* Box Contents */
+.box {
+    background-color: #FBFBFB;
+    background-image: -moz-linear-gradient(center top , #ffffff, #f5f5f5);
+    background-repeat: repeat-x;
+    border: 1px solid #dddddd;
+    padding: 10px;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 0 #ffffff inset;
+}
+/* Sortable lists */
+.sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+.sortable .sortable-item { 
+    margin: 0 3px 3px 3px;
+    padding: 0.4em;
+    padding-left: 1.5em;
+    font-size: 1.4em;
+    border: 1px solid #cccccc;
+    outline: medium none;
+    font-family:'Bitter';
+}
+/* 
+ * Bootstrap css overrides 
+ */
+.sidebar-nav {
+    padding-top: 20px;
+}
+
+/* Site Footer */
 footer p{
     text-align: center;
 }

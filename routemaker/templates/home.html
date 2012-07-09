@@ -5,28 +5,42 @@
 {% block content %}
 <div class="row-fluid" style="padding-top: 50px;">
     <div class="span2">
-        <div class="member-box round-all">
-            <strong>{{ user_profile.database }}</strong>
+        <div class="box">
+            <strong class="database-user">{{ user_profile.database }}</strong>
             <a>{{ user.username }}</a>
+        </div>
+        <div class="sidebar-nav">
+            <div class="well" style="padding: 8px 0;">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Op&#231;&#245;es</li>
+                    <li class="active">
+                        <a href="index.html">
+                            <i class="icon-map-marker"></i>
+                            Criar Rota
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     
-    <div class="span2">
-        <form id="filterForm" action="{% url routemaker.views.pedidos_search %}" method="post" class="well form-inline">{% csrf_token %}
-        {% for field in form %}
-            {{ field }}
-        {% endfor %}
-<!--<input type="text" class="input-small" placeholder="Email">
-<input type="password" class="input-small" placeholder="Password">
-<label class="checkbox">
-<input type="checkbox"> Remember me
-</label>
-<button type="submit" class="btn">Sign in</button>-->
-            <button type="submit" class="btn">Filtrar</button>
-        </form>
-    </div>
-    
-    <div id="pedidos-placeholder">
+    <div class="span10">
+        <div class="row-fluid">
+            <form id="filterForm" action="{% url routemaker.views.pedidos_search %}" method="post" class="well form-inline">{% csrf_token %}
+            {% for field in form %}
+                {{ field }}
+            {% endfor %}
+            <!--<input type="text" class="input-small" placeholder="Email">
+            <input type="password" class="input-small" placeholder="Password">
+            <label class="checkbox">
+            <input type="checkbox"> Remember me
+            </label>
+            <button type="submit" class="btn">Sign in</button>-->
+                <button type="submit" class="btn btn-info">Filtrar</button>
+            </form>
+        </div>
+        <div id="pedidos-placeholder" class="row-fluid sortable">
+        </div>
     </div>
 </div>
 
