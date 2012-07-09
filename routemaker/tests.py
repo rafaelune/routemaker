@@ -25,6 +25,13 @@ class VpsaApiTestCase(TestCase):
         vpsa = VpsaApi('base_exemplo')
         self.assertFalse(vpsa.is_valid_database())
 
+    def test_retorno_terceiros(self):
+        """
+        Testa o retorno de terceiros.
+        """
+        vpsa = VpsaApi('showroom')
+        self.assertTrue(len(vpsa.get_terceiros()) > 0)
+
     def test_retorno_entidades(self):
         """
         Testa o retorno de entidades.
