@@ -181,6 +181,5 @@ class VpsaApi(object):
             pedido.plano_pagamento = iterator['planoPagamento']
             pedido.representante = iterator['representante']
             pedido.terceiro = self.__get_terceiro(entidades, iterator['idTerceiroCliente'])
-            #pedido.terceiro_id = iterator['idTerceiroCliente']
             pedidos.append(pedido)
         return pedidos
