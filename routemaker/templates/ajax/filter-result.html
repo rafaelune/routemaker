@@ -1,7 +1,34 @@
+{% load humanize %}
+
 {% for pedido in pedidos %}
     <div id="{{ pedido.id }}" class="ui-state-default sortable-item box">
-        {{ pedido.numero }}
-        {{ pedido.valor_total }}
-        {{ pedido.terceiro.nome }}
+        <div class="pull-right">
+            <a href="#" title="Remover item da lista" class="icon-remove" onclick="visual.removeSortableItem({{ pedido.id }});">
+                <i class="icon-remove"></i>
+            </a>
+        </div>
+        <div class="span10 item">
+            <strong>
+                <i class="icon-tag"></i>
+                {{ pedido.numero }}
+            </strong>
+            <span>
+                <i class="icon-calendar"></i>
+                {{ pedido.data }}
+            </span>
+        </div>
+        <div class="span10 item">
+            <span>
+                <i class="icon-certificate"></i>
+                {{ pedido.plano_pagamento }}
+            </span>
+            <span>
+                <i class="icon-shopping-cart"></i>
+                R$ {{ pedido.valor_total|intcomma  }}
+            </span>
+        </div>
+        <div class="span10 item">
+            <a href="#" title="Mais info">{{ pedido.terceiro.nome }}</a>
+        </div>
     </div>
 {% endfor %}

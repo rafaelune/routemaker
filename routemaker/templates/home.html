@@ -7,7 +7,7 @@
     <div class="span2">
         <div class="box">
             <strong class="database-user">{{ user_profile.database }}</strong>
-            <a>{{ user.username }}</a>
+            <a href="#" title="Autenticado como {{ user.username }}">{{ user.username }}</a>
         </div>
         <div class="sidebar-nav">
             <div class="well" style="padding: 8px 0;">
@@ -53,14 +53,13 @@
 <script type="text/javascript">
     $(document).ready(function() {
         util.createExternalLinks();
-        util.configUserMenuOptions();
+        visual.configUserMenuOptions();
         
         // prepare Options Object 
         var options = { 
             target:     '#pedidos-placeholder', 
             url:        '/filtro/', 
             success:    function() { 
-                //alert('Thanks for your comment!'); 
                 $('#pedidos-placeholder').sortable();
                 $('#pedidos-placeholder').disableSelection();
             } 

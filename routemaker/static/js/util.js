@@ -7,14 +7,6 @@ var Util = function() {
             return false;
         });
     }
-
-    // Configura o efeito do menu com as opções do usuário autenticado.
-    this.configUserMenuOptions = function() {
-        $('.dropdown-toggle').click(function (e) {
-            e.preventDefault();
-            $('ul.dropdown-menu').toggle();
-        });
-    }
 };
 
 var util = new Util();

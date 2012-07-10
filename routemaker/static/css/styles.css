@@ -59,10 +59,23 @@ p.big{
     margin: 0 3px 3px 3px;
     padding: 0.4em;
     padding-left: 1.5em;
-    font-size: 1.4em;
     border: 1px solid #cccccc;
     outline: medium none;
-    font-family:'Bitter';
+    font-size: 13px;
+    display: block;
+    float: left;
+}
+
+.sortable .sortable-item .item {
+    width: 100%;
+    float: left;
+    display: block;
+    margin: 0;
+}
+
+.sortable .sortable-item .item span, .sortable .sortable-item .item strong{
+    min-width: 30em;
+    float: left;
 }
 /* 
  * Bootstrap css overrides 
