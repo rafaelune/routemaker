@@ -26,34 +26,37 @@
     
     <div class="span10">
         <div class="row-fluid">
-            <form id="filterForm" action="{% url routemaker.views.pedidos_search %}" method="post" class="well form-inline">{% csrf_token %}
-            {% for field in form %}
-                {{ field }}
-            {% endfor %}
-            <!--<input type="text" class="input-small" placeholder="Email">
-            <input type="password" class="input-small" placeholder="Password">
-            <label class="checkbox">
-            <input type="checkbox"> Remember me
-            </label>
-            <button type="submit" class="btn">Sign in</button>-->
-                <button type="submit" class="btn btn-info">Filtrar</button>
-            </form>
-            
-            <div id="pedidos-placeholder" class="row-fluid sortable">
+            <div class="tabbable">
+                <ul class="nav nav-tabs tab-menu">
+                    <li class="active"><a id="lnkTab1" href="#tab1" data-toggle="tab" onclick="visual.goToFirstTabFilter();">Etapa 1</a></li>
+                    <li><a id="lnkTab2" href="#tab2" data-toggle="tab">Etapa 2</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        {% include "route/filter-form.html" %}
+                    </div>
+                    <div class="d_n" id="tab2">
+                        <p>Howdy, I'm in Section 2.</p>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </div>
+
 </div>
 
 {% endblock %}
 
 {% block scripts %}
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
 <script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         util.createExternalLinks();
         visual.configUserMenuOptions();
+        
         
         // prepare Options Object 
         var options = { 

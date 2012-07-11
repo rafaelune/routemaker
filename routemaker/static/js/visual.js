@@ -12,6 +12,32 @@ var Visual = function() {
         $('#' + itemId).remove(); 
         $('#pedidos-placeholder').sortable('refresh');
     }
+    
+    // Configura o efeito de tabulação.
+    this.configTabMenus = function() {
+        $('tab-menu a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    }
+    
+    // Efeitos ao mover para primeiro tab na tela
+    // de filtro de pedidos.
+    this.goToFirstTabFilter = function() {
+        $('#lnkTab1').tab('show');
+        $('#tab2')
+            .removeClass('tab-pane')
+            .addClass('d_n');
+    }
+    
+    // Efeitos ao mover para segundo tab na tela
+    // de filtro de pedidos.
+    this.goToSecondTabFilter = function() {
+        $('#tab2')
+            .removeClass('d_n')
+            .addClass('tab-pane');
+        $('#lnkTab2').tab('show');
+    }
 }
 
 var visual = new Visual();
