@@ -37,7 +37,7 @@ class VpsaApiTestCase(TestCase):
         Testa o retorno de um terceiro.
         """
         vpsa = VpsaApi('showroom')
-        self.assertTrue(vpsa.get_terceiro(6) != None)
+        self.assertTrue(vpsa.get_terceiro(6).id != None)
 
     def test_retorno_entidades(self):
         """
@@ -46,9 +46,16 @@ class VpsaApiTestCase(TestCase):
         vpsa = VpsaApi('showroom')
         self.assertTrue(len(vpsa.get_entidades()) > 0)
 
-    def test_retorno_pedidos(self):
+    def test_retorno_pedido(self):
         """
         Testa o retorno de um pedido.
+        """
+        vpsa = VpsaApi('showroom')
+        self.assertTrue(vpsa.get_pedido(18, 581).id != None)
+        
+    def test_retorno_pedidos(self):
+        """
+        Testa o retorno de pedidos.
         """
         vpsa = VpsaApi('showroom')
         self.assertEqual(vpsa.get_base_url_api('estoque'), 'https://www.vpsa.com.br/estoque/rest/externo/showroom/')

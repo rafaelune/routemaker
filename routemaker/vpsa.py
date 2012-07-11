@@ -177,6 +177,20 @@ class VpsaApi(object):
                 return item
         return None
 
+    def get_pedido(self, entidade_id, pedido_id):
+        http = urllib3.PoolManager()
+        request = http.request('GET', self.get_base_url_api('estoque') + str(entidade_id) + '/pedidos/' + str(pedido_id))
+        pedido_request = json.loads(request.data) # Parse JSON
+        pedido = Pedido()
+        pedido.id = pedido_request['id']
+        pedido.data = pedido_request['data']
+        pedido.numero = pedido_request['numero']
+        pedido.valor_total = pedido_request['valorTotal']
+        pedido.plano_pagamento = pedido_request['planoPagamento']
+        pedido.representante = pedido_request['representante']
+        pedido.terceiro = self.get_terceiro(pedido_request['idTerceiroCliente'])
+        return pedido
+
     def get_pedidos(self, entidade_id):
         http = urllib3.PoolManager()
         request = http.request('GET', self.get_base_url_api('estoque') + str(entidade_id) + '/pedidos/')
