@@ -1,0 +1,15 @@
+<form id="filterForm" action="{% url routemaker.views.pedidos_search %}" method="post" class="well form-inline">{% csrf_token %}
+{% for field in form %}
+    {{ field }}
+{% endfor %}
+<!--<input type="text" class="input-small" placeholder="Email">
+<input type="password" class="input-small" placeholder="Password">
+<label class="checkbox">
+<input type="checkbox"> Remember me
+</label>
+<button type="submit" class="btn">Sign in</button>-->
+    <button type="submit" class="btn btn-info">Filtrar</button>
+</form>
+
+<div id="pedidos-placeholder" class="row-fluid sortable">
+</div>
