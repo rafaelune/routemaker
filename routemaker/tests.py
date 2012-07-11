@@ -32,6 +32,13 @@ class VpsaApiTestCase(TestCase):
         vpsa = VpsaApi('showroom')
         self.assertTrue(len(vpsa.get_terceiros()) > 0)
 
+    def test_retorno_terceiro(self):
+        """
+        Testa o retorno de um terceiro.
+        """
+        vpsa = VpsaApi('showroom')
+        self.assertTrue(vpsa.get_terceiro(6) != None)
+
     def test_retorno_entidades(self):
         """
         Testa o retorno de entidades.

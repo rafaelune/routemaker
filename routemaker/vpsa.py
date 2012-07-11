@@ -160,6 +160,17 @@ class VpsaApi(object):
             terceiros.append(terceiro)
         return terceiros
 
+    def get_terceiro(self, terceiro_id):
+        http = urllib3.PoolManager()
+        request = http.request('GET', self.get_base_url_api('vpsa') + 'terceiros/' + str(terceiro_id))
+        terceiros_request = json.loads(request.data) # Parse JSON
+        terceiro = Terceiro()
+        terceiro.id = terceiros_request['id']
+        terceiro.identificacao = terceiros_request['identificacao']
+        terceiro.nome = terceiros_request['nome']
+        terceiro.email = terceiros_request['email']
+        return terceiro
+
     def __get_terceiro(self, terceiros, terceiro_id):
         for item in terceiros:
             if item.id == terceiro_id:
