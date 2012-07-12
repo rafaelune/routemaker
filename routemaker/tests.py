@@ -6,6 +6,16 @@ from django.contrib.auth.models import User
 from models import UserProfile
 from forms import UserProfileSignupForm
 from vpsa import VpsaApi
+from geographics import PositionApi
+
+class PositionApiTestCase(TestCase):
+    def test_get_location_by_address(self):
+        """
+        Testa o retorno de uma localizacao
+        do Google Maps Api.
+        """
+        position = PositionApi()
+        self.assertTrue(position.get_lat_lng_by_address('São José dos Campos - SP') != None)
 
 class VpsaApiTestCase(TestCase):
     def test_valid_database(self):
