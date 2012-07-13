@@ -25,17 +25,16 @@ var Visual = function() {
     // de filtro de pedidos.
     this.goToFirstTabFilter = function() {
         $('#lnkTab1').tab('show');
-        $('#tab2')
-            .removeClass('tab-pane')
-            .addClass('d_n');
+        $('#tab2').removeClass('tab-pane');
+        $('#tab2').addClass('d_n');
     }
     
     // Efeitos ao mover para segundo tab na tela
     // de filtro de pedidos.
     this.goToSecondTabFilter = function() {
-        $('#tab2')
-            .removeClass('d_n')
-            .addClass('tab-pane');
+        $('#tab2').removeClass('d_n');
+        $('#tab2').addClass('tab-pane');
+        $('#lnkTab2').parent().removeClass('d_n');
         $('#lnkTab2').tab('show');
     }
 }

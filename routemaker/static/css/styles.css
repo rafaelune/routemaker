@@ -51,7 +51,9 @@ p.big{
     box-shadow: 0 1px 0 #ffffff inset;
 }
 
-/* Sortable lists */
+/* 
+ * Sortable list
+ */
 .sortable {
     list-style-type: none;
     margin: 0;
@@ -81,6 +83,15 @@ p.big{
     min-width: 30em;
     float: left;
 }
+/*
+ * Map css
+ */
+.map-normal {
+    width: 100%;
+    height: 300px;
+    display: block;
+}
+
 /* 
  * Bootstrap css overrides 
  */

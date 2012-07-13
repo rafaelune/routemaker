@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core.cache import cache
 from forms import FilterPedidoForm, UserProfileSignupForm, UserProfileLoginForm
 from models import UserProfile
 from vpsa import VpsaApi
@@ -77,6 +78,11 @@ def home(request):
     user = request.user
     user_profile = request.user.get_profile()
     
+    # Deletes previous cached data
+    cached_data = cache.get(user.username + '_' + user_profile.database, None)
+    if cached_data != None:
+        cache.delete(user.username + '_' + user_profile.database)
+    
     vpsa = VpsaApi(user_profile.database)
     form = FilterPedidoForm(database=user_profile.database)
     
@@ -95,6 +101,8 @@ def pedidos_search(request):
         entidade = request.POST.get('entidade')
         
         pedidos = vpsa.get_pedidos(entidade)
+        # Caches data for an hour
+        cache.set(user.username + '_' + user_profile.database, pedidos, 60 * 60)
         
         return render_to_response('ajax/filter-result.html', 
             locals(), 

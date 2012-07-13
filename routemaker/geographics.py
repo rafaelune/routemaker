@@ -22,7 +22,7 @@ class Location(object):
         self.__lng = lng
 
 class PositionApi(object):
-    def get_lat_lng_by_address(self, address):
+    def get_location_by_address(self, address):
         base_url = 'http://maps.googleapis.com/maps/api/geocode/json?address={0}&sensor=true'
         base_url = base_url.format(address.replace(" ", "+"))
         
