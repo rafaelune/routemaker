@@ -88,15 +88,6 @@
         $('#filterForm').ajaxForm(options);
 
     });
-
-    function drawDirections(route) {
-        while(route.step_count < route.steps_length) {
-            route.forward();
-
-            if(route.step_count < route.steps_length)
-                $('#instructions').append('<li>'+route.steps[route.step_count].instructions+'</li>');
-        }
-    }
     
     function loadTab2() {
         startsLat = -23.17908;
@@ -111,13 +102,13 @@
             lat: -23.17908,
             lng: -45.887248
         });
-        map.addMarker({
+        /*map.addMarker({
             lat: startsLat,
             lng: startsLng,
             infoWindow: {
                 content: '<strong>Ponto de Partida</strong>'
             }
-        });
+        });*/
         
         // get pedidos id
         var pedidos_list = $('.sortable-item').map(
@@ -132,6 +123,55 @@
             function(retorno) {
                 for(var i=0; i<retorno.length; i++) {
                     var item = retorno[i];
+
+                    if (item) {
+                        GMaps.geocode({
+                            address: item._Pedido__terceiro._Terceiro__logradouro
+                                + ',' + item._Pedido__terceiro._Terceiro__bairro
+                                + ',' + item._Pedido__terceiro._Terceiro__cidade
+                                + ' - ' + item._Pedido__terceiro._Terceiro__estado,
+                            callback: function(results, status) {
+                                if (status == 'OK') {
+                                    var latlng = results[0].geometry.location;
+                                    
+                                    map.addMarker({
+                                        lat: latlng.lat(),
+                                        lng: latlng.lng(),
+                                        infoWindow: {
+                                            content: '<strong>' + item._Pedido__terceiro._Terceiro__nome +'</strong>'
+                                        }
+                                    });
+
+                                    map.travelRoute({
+                                        origin: [startsLat, startsLng],
+                                        destination: [latlng.lat(), latlng.lng()],
+                                        travelMode: 'driving',
+                                        step: function(e) {
+                                            $('#instructions').append('<li>'+e.instructions+'</li>');
+
+                                            $('#instructions li:eq(' + e.step_number + ')').delay(550 * e.step_number).fadeIn(200, function() {
+                                                map.drawPolyline({
+                                                    path: e.path,
+                                                    strokeColor: '#336699',
+                                                    strokeOpacity: 0.6,
+                                                    strokeWeight: 6
+                                                });
+                                            });
+                                        }
+                                    });
+
+                                    startsLat = latlng.lat();
+                                    startsLng = latlng.lng();
+
+                                    /*map.setCenter(latlng.lat(), latlng.lng());
+                                    map.addMarker({
+                                        lat: latlng.lat(),
+                                        lng: latlng.lng()
+                                    });*/
+                                }
+                            }
+                        });
+                    }
                     if (item._Pedido__terceiro != null && item._Pedido__terceiro._Terceiro__geolocated) {
 
                         map.addMarker({
