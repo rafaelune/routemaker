@@ -36,7 +36,15 @@
                         {% include "route/filter-form.html" %}
                     </div>
                     <div class="d_n tab-pane" id="tab2">
-                        <div id="my-map" class="map-normal"></div>
+                        <div class="white-box">
+                            <div id="my-map" class="map-normal"></div>
+                        </div>
+
+                        <div class="row">
+                            <ul id="instructions">
+                                <li></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,6 +75,10 @@
         var options = { 
             target:     '#pedidos-placeholder', 
             url:        '/filtro/', 
+            beforeSubmit: function(arr, $form, options) {
+                // saves the entidade id selected
+                $('#my-map').data('entidade', arr[1].value);
+            },
             success:    function() { 
                 $('#pedidos-placeholder').sortable();
                 $('#pedidos-placeholder').disableSelection();
@@ -76,20 +88,97 @@
         $('#filterForm').ajaxForm(options);
 
     });
+
+    function drawDirections(route) {
+        while(route.step_count < route.steps_length) {
+            route.forward();
+
+            if(route.step_count < route.steps_length)
+                $('#instructions').append('<li>'+route.steps[route.step_count].instructions+'</li>');
+        }
+    }
     
     function loadTab2() {
+        startsLat = -23.17908;
+        startsLng = -45.887248;
+
         visual.goToSecondTabFilter();
-        mapper.getUserPosition('#my-map');
-        
-        /*$.ajax({
-            type: "POST",
-            url: "/get_contatos/",
-            dataType: "json",
-            success: function(retorno){
-            },
-            error: function(retorno) {
+        //mapper.startMap('#my-map');
+
+        // inits the map
+        map = new GMaps({
+            div: '#my-map',
+            lat: -23.17908,
+            lng: -45.887248
+        });
+        map.addMarker({
+            lat: startsLat,
+            lng: startsLng,
+            infoWindow: {
+                content: '<strong>Ponto de Partida</strong>'
             }
-        });*/
+        });
+        
+        // get pedidos id
+        var pedidos_list = $('.sortable-item').map(
+            function () {
+                return $(this).attr('id');
+            }
+        ).get().join(',');
+
+        $.getJSON(
+            '{% url routemaker.views.pedidos_json %}', 
+            { entidade: $('#my-map').data('entidade'), 'pedidos[]': [pedidos_list] }, 
+            function(retorno) {
+                for(var i=0; i<retorno.length; i++) {
+                    var item = retorno[i];
+                    if (item._Pedido__terceiro != null && item._Pedido__terceiro._Terceiro__geolocated) {
+
+                        map.addMarker({
+                            lat: item._Pedido__terceiro._Terceiro__lat,
+                            lng: item._Pedido__terceiro._Terceiro__lng,
+                            infoWindow: {
+                                content: '<strong>' + item._Pedido__terceiro._Terceiro__nome +'</strong>'
+                            }
+                        });
+
+                        map.travelRoute({
+                            origin: [startsLat, startsLng],
+                            destination: [item._Pedido__terceiro._Terceiro__lat, item._Pedido__terceiro._Terceiro__lng],
+                            travelMode: 'driving',
+                            /*callback: function(e){
+                                route = new GMaps.Route({
+                                  map: map,
+                                  route: e[0],
+                                  strokeColor: '#336699',
+                                  strokeOpacity: 0.5,
+                                  strokeWeight: 10
+                                });
+
+                                drawDirections(route);
+                            }*/
+                            step: function(e) {
+                                $('#instructions').append('<li>'+e.instructions+'</li>');
+
+                                $('#instructions li:eq(' + e.step_number + ')').delay(450 * e.step_number).fadeIn(200, function() {
+                                    map.drawPolyline({
+                                        path: e.path,
+                                        strokeColor: '#131540',
+                                        strokeOpacity: 0.6,
+                                        strokeWeight: 6
+                                    });
+                                });
+                            }
+                        });
+
+                        startsLat = item._Pedido__terceiro._Terceiro__lat;
+                        startsLng = item._Pedido__terceiro._Terceiro__lng;
+                    } else {
+                        $('#instructions').append('<li> No directions for:'+ item._Pedido__terceiro._Terceiro__nome +'</li>');
+                    }
+                }
+            }
+        );
     }
 </script> 
 {% endblock %}

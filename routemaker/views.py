@@ -8,11 +8,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.core.cache import cache
 from forms import FilterPedidoForm, UserProfileSignupForm, UserProfileLoginForm
 from models import UserProfile
 from vpsa import VpsaApi
-import urllib3
+import jsonpickle, urllib3
 
 def index(request):
     user = request.user
@@ -78,11 +77,6 @@ def home(request):
     user = request.user
     user_profile = request.user.get_profile()
     
-    # Deletes previous cached data
-    cached_data = cache.get(user.username + '_' + user_profile.database, None)
-    if cached_data != None:
-        cache.delete(user.username + '_' + user_profile.database)
-    
     vpsa = VpsaApi(user_profile.database)
     form = FilterPedidoForm(database=user_profile.database)
     
@@ -101,8 +95,6 @@ def pedidos_search(request):
         entidade = request.POST.get('entidade')
         
         pedidos = vpsa.get_pedidos(entidade)
-        # Caches data for an hour
-        cache.set(user.username + '_' + user_profile.database, pedidos, 60 * 60)
         
         return render_to_response('ajax/filter-result.html', 
             locals(), 
@@ -110,3 +102,24 @@ def pedidos_search(request):
         )
     else:
         return HttpResponseRedirect('/')
+
+@login_required(login_url='/')
+def pedidos_json(request):
+    user = request.user
+    user_profile = request.user.get_profile()
+    vpsa = VpsaApi(user_profile.database)
+    
+    pedidos_json = []
+    if request.method == 'GET':
+        entidade_id = request.GET.get('entidade')
+        pedidos_ids = request.GET.get('pedidos[]')
+
+        if entidade_id != None and pedidos_ids != None:
+            array_pedidos_id = pedidos_ids.split(',')
+
+            for pedido_id in array_pedidos_id:
+                pedido = vpsa.get_pedido(entidade_id, pedido_id, True)
+                pedidos_json.append(pedido)
+
+    retorno = jsonpickle.encode(pedidos_json)
+    return HttpResponse(retorno, mimetype="text/javascript")

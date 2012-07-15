@@ -70,6 +70,9 @@ class Pedido(object):
         self.__terceiro = terceiro
 
 class Terceiro(object):
+    def __init__(self):
+        self.__geolocated = False
+
     # get id
     @property
     def id(self):
@@ -102,24 +105,22 @@ class Terceiro(object):
     @email.setter
     def email(self, email):
         self.__email = email
-    # get endereco
+     # get lat
     @property
-    def endereco(self):
-        return self.__endereco
-    # set endereco
-    @endereco.setter
-    def endereco(self, endereco):
-        self.__endereco = endereco
-
-class Endereco(object):
-    # get localizacao
+    def lat(self):
+        return self.__lat
+    # set lat
+    @lat.setter
+    def lat(self, lat):
+        self.__lat = lat
+    # get lng
     @property
-    def localizacao(self):
-        return self.__localizacao
-    # set localizacao
-    @localizacao.setter
-    def localizacao(self, localizacao):
-        self.__localizacao = localizacao
+    def lng(self):
+        return self.__lng
+    # set lng
+    @lng.setter
+    def lng(self, lng):
+        self.__lng = lng
     # get cidade
     @property
     def cidade(self):
@@ -160,7 +161,22 @@ class Endereco(object):
     @logradouro.setter
     def logradouro(self, logradouro):
         self.__logradouro = logradouro
-    
+    # get geolocated
+    @property
+    def geolocated(self):
+        return self.__geolocated
+    # set geolocated
+    @geolocated.setter
+    def geolocated(self, geolocated):
+        self.__geolocated = geolocated
+
+    def set_geolocation(self, lat, lng):
+        if lat != None and lng != None:
+            self.__geolocated = True
+
+        self.__lat = lat
+        self.__lng = lng
+
     def get_full_address(self):
         return '{0}, {1}, {2}-{3}'.format(
             self.logradouro,
@@ -213,7 +229,7 @@ class VpsaApi(object):
             entidades.append(entidade)
         return entidades
 
-    def get_terceiros(self):
+    def get_terceiros(self, loads_location=False):
         http = urllib3.PoolManager()
         request = http.request('GET', self.get_base_url_api('vpsa') + 'terceiros/')
         terceiros_request = json.loads(request.data) # Parse JSON
@@ -226,43 +242,42 @@ class VpsaApi(object):
             terceiro.email = iterator['email']
             
             if iterator['endereco'] != None:
-                endereco = Endereco()
-                
+
                 if iterator['endereco']['cidade'] != None:
-                    endereco.cidade = iterator['endereco']['cidade']
+                    terceiro.cidade = iterator['endereco']['cidade']
                 else:
-                    endereco.cidade = ''
+                    terceiro.cidade = ''
                 
                 if iterator['endereco']['logradouro'] != None:
-                    endereco.logradouro = iterator['endereco']['logradouro']
+                    terceiro.logradouro = iterator['endereco']['logradouro']
                 else:
-                    endereco.logradouro = ''
+                    terceiro.logradouro = ''
                 
                 if iterator['endereco']['bairro'] != None:
-                    endereco.bairro = iterator['endereco']['bairro']
+                    terceiro.bairro = iterator['endereco']['bairro']
                 else:
-                    endereco.bairro = ''
+                    terceiro.bairro = ''
                 
                 if iterator['endereco']['pais'] != None:
-                    endereco.pais = iterator['endereco']['pais']
+                    terceiro.pais = iterator['endereco']['pais']
                 else:
-                    endereco.pais = ''
+                    terceiro.pais = ''
                 
                 if iterator['endereco']['siglaEstado'] != None:
-                    endereco.estado = iterator['endereco']['siglaEstado']
+                    terceiro.estado = iterator['endereco']['siglaEstado']
                 else:
-                    endereco.estado = ''
+                    terceiro.estado = ''
                 
-                position_api = PositionApi()
-                location = position_api.get_location_by_address(endereco.get_full_address())
-                endereco.localizacao = location
-                
-                terceiro.endereco = endereco
-            
+                if loads_location == True:
+                    position_api = PositionApi()
+                    location = position_api.get_location_by_address(terceiro.get_full_address())
+                    if location != None:
+                        terceiro.set_geolocation(location.lat, location.lng)
+
             terceiros.append(terceiro)
         return terceiros
 
-    def get_terceiro(self, terceiro_id):
+    def get_terceiro(self, terceiro_id, loads_location=False):
         http = urllib3.PoolManager()
         request = http.request('GET', self.get_base_url_api('vpsa') + 'terceiros/' + str(terceiro_id))
         terceiros_request = json.loads(request.data) # Parse JSON
@@ -272,18 +287,18 @@ class VpsaApi(object):
         terceiro.nome = terceiros_request['nome']
         terceiro.email = terceiros_request['email']
         
-        endereco = Endereco()
-        endereco.cidade = terceiros_request['endereco']['cidade']
-        endereco.logradouro = terceiros_request['endereco']['logradouro']
-        endereco.bairro = terceiros_request['endereco']['bairro']
-        endereco.pais = terceiros_request['endereco']['pais']
-        endereco.estado = terceiros_request['endereco']['siglaEstado']
-        
-        position_api = PositionApi()
-        location = position_api.get_location_by_address(endereco.get_full_address())
-        endereco.localizacao = location
-        
-        terceiro.endereco = endereco
+        if terceiros_request['endereco'] != None:
+            terceiro.cidade = terceiros_request['endereco']['cidade']
+            terceiro.logradouro = terceiros_request['endereco']['logradouro']
+            terceiro.bairro = terceiros_request['endereco']['bairro']
+            terceiro.pais = terceiros_request['endereco']['pais']
+            terceiro.estado = terceiros_request['endereco']['siglaEstado']
+            
+            if loads_location == True:
+                position_api = PositionApi()
+                location = position_api.get_location_by_address(terceiro.get_full_address())
+                if location != None:
+                    terceiro.set_geolocation(location.lat, location.lng)
         
         return terceiro
 
@@ -293,7 +308,7 @@ class VpsaApi(object):
                 return item
         return None
 
-    def get_pedido(self, entidade_id, pedido_id):
+    def get_pedido(self, entidade_id, pedido_id, loads_location=False):
         http = urllib3.PoolManager()
         request = http.request('GET', self.get_base_url_api('estoque') + str(entidade_id) + '/pedidos/' + str(pedido_id))
         pedido_request = json.loads(request.data) # Parse JSON
@@ -304,15 +319,15 @@ class VpsaApi(object):
         pedido.valor_total = pedido_request['valorTotal']
         pedido.plano_pagamento = pedido_request['planoPagamento']
         pedido.representante = pedido_request['representante']
-        pedido.terceiro = self.get_terceiro(pedido_request['idTerceiroCliente'])
+        pedido.terceiro = self.get_terceiro(pedido_request['idTerceiroCliente'], loads_location)
         return pedido
 
-    def get_pedidos(self, entidade_id):
+    def get_pedidos(self, entidade_id, loads_location=False):
         http = urllib3.PoolManager()
         request = http.request('GET', self.get_base_url_api('estoque') + str(entidade_id) + '/pedidos/')
         pedidos_request = json.loads(request.data) # Parse JSON
         pedidos = []
-        entidades = self.get_entidades()
+        entidades = self.get_terceiros(loads_location)
         for iterator in pedidos_request:
             pedido = Pedido()
             pedido.id = iterator['id']

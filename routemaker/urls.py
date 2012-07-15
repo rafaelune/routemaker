@@ -19,6 +19,9 @@ urlpatterns = patterns('',
     # Ajax filtro de pedidos
     (r'^filtro/$', 'routemaker.views.pedidos_search'),
 
+    # Ajax retorno de pedidos em json
+    (r'^pedidos/$', 'routemaker.views.pedidos_json'),
+
     # Pagina principal
     (r'^home/$', 'routemaker.views.home'),
 

@@ -1,9 +1,9 @@
 import urllib3, json
 
 class Location(object):
-    def __init__(self, id, nome):
-        self.__id = id
-        self.__nome = nome
+    def __init__(self, lat, lng):
+        self.__lat = lat
+        self.__lng = lng
     # get lat
     @property
     def lat(self):
