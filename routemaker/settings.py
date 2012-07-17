@@ -1,4 +1,4 @@
-import os
+import dj_database_url, os
 PROJECT_ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Django settings for routemaker project.
@@ -11,24 +11,24 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'routemaker',                      # Or path to database file if using sqlite3.
-        'USER': 'postgres',                      # Not used with sqlite3.
-        'PASSWORD': 'admin',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    },
-    'test': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'routemaker',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'TEST_MIRROR': 'default',
-    }
-}
+DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+#DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME': 'routemaker',                      # Or path to database file if using sqlite3.
+#         'USER': 'postgres',                      # Not used with sqlite3.
+#         'PASSWORD': 'admin',                  # Not used with sqlite3.
+#         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+#     },
+#     'test': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'routemaker',
+#         'USER': 'postgres',
+#         'PASSWORD': 'admin',
+#         'TEST_MIRROR': 'default',
+#     }
+# }
 
 AUTH_PROFILE_MODULE = 'routemaker.UserProfile'
 
