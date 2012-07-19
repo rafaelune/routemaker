@@ -1,10 +1,11 @@
 var Visual = function() {
-    // Configura o efeito do menu com as opções do usuário autenticado.
+    /* 
+     * Configura o efeito do menu com as opções do usuário autenticado.
+     *
+     * Requires bootstrap-dropdown.js 
+     */
     this.configUserMenuOptions = function() {
-        $('.dropdown-toggle').click(function (e) {
-            e.preventDefault();
-            $('ul.dropdown-menu').toggle();
-        });
+        $('.dropdown-toggle').dropdown();
     }
     
     // Remove um item do resultado da lista de pedidos.

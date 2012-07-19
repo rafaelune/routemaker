@@ -44,12 +44,15 @@
                     </div>
                     <div class="d_n tab-pane" id="tab2">
                         <form id="filterForm" method="post" class="well form-inline">{% csrf_token %}
-                            <input type="text" id="endereco" class="input-big" placeholder="Endereco">
-                            <a id="buscar" class="btn btn-small btn-info">Buscar</a>
-                            <a id="obter-endereco" class="btn btn-small icon-screenshot">Obter endereco</a>
+                            <input type="text" id="endereco" class="input-big" placeholder="Endere&#231;o">
+                            <a href="#" id="buscar" class="btn btn-small btn-info" title="Buscar pelo endere&#231;o">Buscar pelo endere&#231;o</a>
+                            <a href="#" id="obter-posicao" class="btn btn-small" title="Obter minha posi&#231;&#227;o">
+                                <i class="icon-screenshot"></i>
+                                Obter minha posi&#231;&#227;o
+                            </a>
                         </form>
 
-                        <button href="#" class="btn-large btn-warning" onclick="loadTab3();">Pr&#243;xima</input>
+                        <button id="btnNext2" disabled="disabled" class="btn-large btn disabled" onclick="loadTab3();">Pr&#243;xima</button>
                     </div>
                     <div class="d_n tab-pane" id="tab3">
                         <div class="row">
@@ -70,6 +73,7 @@
 
 {% block scripts %}
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
 <script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
 
@@ -95,10 +99,10 @@
         });
 
         $('#buscar').click(function() {
-            searchMyPosition();
+            getMyPositionByAddress();
         });
 
-        $('#obter-endereco').click(function() {
+        $('#obter-posicao').click(function() {
             getMyPosition();
         });
 
@@ -119,7 +123,7 @@
         $('#filterForm').ajaxForm(options);
     });
 
-    function searchMyPosition() {
+    function getMyPositionByAddress() {
         GMaps.geocode({
             address: $('#endereco').val(),
             callback: function(results, status) {
@@ -144,6 +148,9 @@
                             content: '<strong>Ponto de partida</strong>'
                         }
                     });
+
+                    $('#btnNext2').removeClass('disabled');
+                    $('#btnNext2').removeAttr('disabled');
                 }
             }
         });
@@ -170,6 +177,9 @@
                         content: '<strong>Ponto de partida</strong>'
                     }
                 });
+
+                $('#btnNext2').removeClass('disabled');
+                $('#btnNext2').removeAttr('disabled');
             },
             error: function(error) {
                 startsLat = geoip_latitude;
@@ -191,6 +201,9 @@
                         content: '<strong>Ponto de partida</strong>'
                     }
                 });
+
+                $('#btnNext2').removeClass('disabled');
+                $('#btnNext2').removeAttr('disabled');
             },
             not_supported: function() {
                 // use MaxMind IP to location API fallback
@@ -203,6 +216,9 @@
                         content: '<strong>Ponto de partida</strong>'
                     }
                 });
+
+                $('#btnNext2').removeClass('disabled');
+                $('#btnNext2').removeAttr('disabled');
             }
         });
     }
@@ -332,6 +348,7 @@
             function(retorno) {
                 if (retorno.length > 0) {
                     pedidos_json = retorno;
+                    $('#instructions li').remove()
                     geolocatePedidos();
                 }
             }
