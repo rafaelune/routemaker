@@ -27,6 +27,8 @@ var Visual = function() {
         $('#lnkTab1').tab('show');
         $('#tab2').removeClass('tab-pane');
         $('#tab2').addClass('d_n');
+        $('#tab3').removeClass('tab-pane');
+        $('#tab3').addClass('d_n');
     }
     
     // Efeitos ao mover para segundo tab na tela
@@ -36,6 +38,13 @@ var Visual = function() {
         $('#tab2').addClass('tab-pane');
         $('#lnkTab2').parent().removeClass('d_n');
         $('#lnkTab2').tab('show');
+    }
+
+    this.goToThirdTabFilter = function() {
+        $('#tab3').removeClass('d_n');
+        $('#tab3').addClass('tab-pane');
+        $('#lnkTab3').parent().removeClass('d_n');
+        $('#lnkTab3').tab('show');
     }
 }
 

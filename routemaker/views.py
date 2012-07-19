@@ -118,7 +118,7 @@ def pedidos_json(request):
             array_pedidos_id = pedidos_ids.split(',')
 
             for pedido_id in array_pedidos_id:
-                pedido = vpsa.get_pedido(entidade_id, pedido_id, True)
+                pedido = vpsa.get_pedido(entidade_id, pedido_id)
                 pedidos_json.append(pedido)
 
     retorno = jsonpickle.encode(pedidos_json)

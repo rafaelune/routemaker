@@ -26,20 +26,32 @@
     
     <div class="span10">
         <div class="row-fluid">
+            <div class="white-box">
+                <div id="my-map" class="map-normal"></div>
+            </div>
+        </div>
+        <hr />
+        <div class="row-fluid">
             <div class="tabbable">
                 <ul class="nav nav-tabs tab-menu">
                     <li class="active"><a id="lnkTab1" href="#tab1" data-toggle="tab" onclick="visual.goToFirstTabFilter();">Etapa 1</a></li>
                     <li class="d_n"><a id="lnkTab2" href="#tab2" data-toggle="tab">Etapa 2</a></li>
+                    <li class="d_n"><a id="lnkTab3" href="#tab3" data-toggle="tab">Etapa 3</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                         {% include "route/filter-form.html" %}
                     </div>
                     <div class="d_n tab-pane" id="tab2">
-                        <div class="white-box">
-                            <div id="my-map" class="map-normal"></div>
-                        </div>
+                        <form id="filterForm" method="post" class="well form-inline">{% csrf_token %}
+                            <input type="text" id="endereco" class="input-big" placeholder="Endereco">
+                            <a id="buscar" class="btn btn-small btn-info">Buscar</a>
+                            <a id="obter-endereco" class="btn btn-small icon-screenshot">Obter endereco</a>
+                        </form>
 
+                        <button href="#" class="btn-large btn-warning" onclick="loadTab3();">Pr&#243;xima</input>
+                    </div>
+                    <div class="d_n tab-pane" id="tab3">
                         <div class="row">
                             <ul id="instructions">
                                 <li></li>
@@ -66,10 +78,30 @@
 <script type="text/javascript" src="http://j.maxmind.com/app/geoip.js"></script>
 
 <script type="text/javascript">
+    startsLat = -23.17908;
+    startsLng = -45.887248;
+
+    var map = null;
+
     $(document).ready(function() {
         util.createExternalLinks();
         visual.configUserMenuOptions();
-        
+
+        // inits the map
+        map = new GMaps({
+            div: '#my-map',
+            lat: startsLat,
+            lng: startsLng
+        });
+
+        $('#buscar').click(function() {
+            searchMyPosition();
+        });
+
+        $('#obter-endereco').click(function() {
+            getMyPosition();
+        });
+
         // prepare Options Object 
         var options = { 
             target:     '#pedidos-placeholder', 
@@ -85,20 +117,59 @@
         };
         // pass options to ajaxForm 
         $('#filterForm').ajaxForm(options);
-
     });
-    
-    function loadTab2() {
 
-        startsLat = -23.17908;
-        startsLng = -45.887248;
+    function searchMyPosition() {
+        GMaps.geocode({
+            address: $('#endereco').val(),
+            callback: function(results, status) {
+                if (status == 'OK') {
+                    var geocode_location = results[0].geometry.location;
+                    
+                    startsLat = geocode_location.lat();
+                    startsLng = geocode_location.lng();
 
+                    map = new GMaps({
+                        div: '#my-map',
+                        lat: startsLat,
+                        lng: startsLng
+                    });
+
+                    map.setCenter(geocode_location.lat(), geocode_location.lng());
+
+                    map.addMarker({
+                        lat: geocode_location.lat(),
+                        lng: geocode_location.lng(),
+                        infoWindow: {
+                            content: '<strong>Ponto de partida</strong>'
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function getMyPosition() {
         GMaps.geolocate({
             success: function(position) {
                 startsLat = position.coords.latitude;
                 startsLng = position.coords.longitude;
 
+                map = new GMaps({
+                    div: '#my-map',
+                    lat: startsLat,
+                    lng: startsLng
+                });
+
                 map.setCenter(position.coords.latitude, position.coords.longitude);
+
+                map.addMarker({
+                    lat: startsLat,
+                    lng: startsLng,
+                    infoWindow: {
+                        content: '<strong>Ponto de partida</strong>'
+                    }
+                });
             },
             error: function(error) {
                 startsLat = geoip_latitude;
@@ -106,22 +177,43 @@
 
                 // use MaxMind IP to location API fallback
                 map.setCenter(startsLat, startsLng);
+
+                map = new GMaps({
+                    div: '#my-map',
+                    lat: startsLat,
+                    lng: startsLng
+                });
+
+                map.addMarker({
+                    lat: startsLat,
+                    lng: startsLng,
+                    infoWindow: {
+                        content: '<strong>Ponto de partida</strong>'
+                    }
+                });
             },
             not_supported: function() {
                 // use MaxMind IP to location API fallback
                 map.setCenter(startsLat, startsLng);
+
+                map.addMarker({
+                    lat: startsLat,
+                    lng: startsLng,
+                    infoWindow: {
+                        content: '<strong>Ponto de partida</strong>'
+                    }
+                });
             }
         });
+    }
 
+    function loadTab2() {
         visual.goToSecondTabFilter();
+    }
+    
+    function loadTab3() {
+        visual.goToThirdTabFilter();
 
-        // inits the map
-        map = new GMaps({
-            div: '#my-map',
-            lat: -23.17908,
-            lng: -45.887248
-        });
-        
         // get pedidos id
         var pedidos_list = $('.sortable-item').map(
             function () {
@@ -141,14 +233,6 @@
             if (counter==0) {
                 origin_lat = startsLat;
                 origin_lng = startsLng;
-
-                map.addMarker({
-                    lat: origin_lat,
-                    lng: origin_lng,
-                    infoWindow: {
-                        content: '<strong>Ponto de partida</strong>'
-                    }
-                });
             }
 
             if (counter < pedidos_json.length) {
