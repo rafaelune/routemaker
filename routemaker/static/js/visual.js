@@ -21,6 +21,27 @@ var Visual = function() {
             $(this).tab('show');
         })
     }
+
+    /* Configura mensagem de carregando. */
+    this.showLoading = function() {
+        $.blockUI({ 
+            message: 'Processando...',
+            css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            }
+        });
+    }
+
+    /* Fecha a mensagem de carregando. */
+    this.closeLoading = function() {
+        $.unblockUI();
+    }
     
     // Efeitos ao mover para primeiro tab na tela
     // de filtro de pedidos.

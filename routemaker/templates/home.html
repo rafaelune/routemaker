@@ -55,7 +55,7 @@
                         <button id="btnNext2" disabled="disabled" class="btn-large btn disabled" onclick="loadTab3();">Pr&#243;xima</button>
                     </div>
                     <div class="d_n tab-pane" id="tab3">
-                        <div class="row">
+                        <div class="row-fluid">
                             <ul id="instructions">
                                 <li></li>
                             </ul>
@@ -76,6 +76,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
 <script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript" src="http://malsup.github.com/jquery.blockUI.js"></script>
 
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="https://raw.github.com/HPNeo/gmaps/master/gmaps.js"></script>
@@ -113,10 +114,23 @@
             beforeSubmit: function(arr, $form, options) {
                 // saves the entidade id selected
                 $('#my-map').data('entidade', arr[1].value);
+                visual.showLoading();
             },
-            success:    function() { 
-                $('#pedidos-placeholder').sortable();
-                $('#pedidos-placeholder').disableSelection();
+            success: function() { 
+                $('#pedidos-placeholder').sortable({
+                    connectWith: '#selected-pedidos-placeholder',
+                    placeholder: 'ui-state-highlight'
+                });
+                $('#selected-pedidos-placeholder').sortable({
+                    connectWith: '#pedidos-placeholder',
+                    placeholder: 'ui-state-highlight'
+                });
+                $('.sortable').disableSelection();
+
+                $('#btnNext1').removeClass('disabled');
+                $('#btnNext1').removeAttr('disabled');
+
+                visual.closeLoading();
             } 
         };
         // pass options to ajaxForm 
@@ -157,6 +171,8 @@
     }
 
     function getMyPosition() {
+        visual.showLoading();
+
         GMaps.geolocate({
             success: function(position) {
                 startsLat = position.coords.latitude;
@@ -180,6 +196,8 @@
 
                 $('#btnNext2').removeClass('disabled');
                 $('#btnNext2').removeAttr('disabled');
+
+                visual.closeLoading();
             },
             error: function(error) {
                 startsLat = geoip_latitude;
@@ -204,10 +222,21 @@
 
                 $('#btnNext2').removeClass('disabled');
                 $('#btnNext2').removeAttr('disabled');
+
+                visual.closeLoading();
             },
             not_supported: function() {
+                startsLat = geoip_latitude;
+                startsLng = geoip_longitude();
+
                 // use MaxMind IP to location API fallback
                 map.setCenter(startsLat, startsLng);
+
+                map = new GMaps({
+                    div: '#my-map',
+                    lat: startsLat,
+                    lng: startsLng
+                });
 
                 map.addMarker({
                     lat: startsLat,
@@ -219,6 +248,8 @@
 
                 $('#btnNext2').removeClass('disabled');
                 $('#btnNext2').removeAttr('disabled');
+
+                visual.closeLoading();
             }
         });
     }
@@ -231,7 +262,7 @@
         visual.goToThirdTabFilter();
 
         // get pedidos id
-        var pedidos_list = $('.sortable-item').map(
+        var pedidos_list = $('#selected-pedidos-placeholder .sortable-item').map(
             function () {
                 return $(this).attr('id');
             }
@@ -291,6 +322,8 @@
 
                 counter++;
                 drawRoutes();
+            } else {
+                visual.closeLoading();
             }
         }
 
@@ -346,6 +379,7 @@
             '{% url routemaker.views.pedidos_json %}', 
             { entidade: $('#my-map').data('entidade'), 'pedidos[]': [pedidos_list] }, 
             function(retorno) {
+                visual.showLoading();
                 if (retorno.length > 0) {
                     pedidos_json = retorno;
                     $('#instructions li').remove()

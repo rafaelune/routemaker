@@ -49,13 +49,9 @@ class UserProfileSignupForm(forms.Form):
         return self.cleaned_data['password_confirm']
 
     def clean_database(self):
-        try:
-            user = UserProfile.objects.get(database=self.cleaned_data['database'])
-            raise forms.ValidationError('Banco de dados "%s" já cadastrado.' % self.cleaned_data['database'])
-        except UserProfile.DoesNotExist:
-            vpsa_api = VpsaApi(self.cleaned_data['database'])
-            if not vpsa_api.is_valid_database():
-                forms.ValidationError('Banco de dados "%s" não está disponível.' % self.cleaned_data['database'])
+        vpsa_api = VpsaApi(self.cleaned_data['database'])
+        if not vpsa_api.is_valid_database():
+            forms.ValidationError('Banco de dados "%s" não está disponível.' % self.cleaned_data['database'])
         return self.cleaned_data['database']
 
     def clean(self):

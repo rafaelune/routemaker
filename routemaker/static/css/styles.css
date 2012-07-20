@@ -64,11 +64,14 @@ p.big{
 .sortable {
     list-style-type: none;
     margin: 0;
+    margin-right: 10px;
     padding: 0;
+    background: #eee; 
+    padding: 5px;
     width: 100%;
 }
 
-.sortable .sortable-item { 
+.sortable .sortable-item, .ui-state-highlight { 
     margin: 0 3px 3px 3px;
     padding: 0.4em;
     padding-left: 1.5em;
@@ -77,6 +80,14 @@ p.big{
     font-size: 13px;
     display: block;
     float: left;
+}
+
+.ui-state-highlight {
+    height: 1.5em;
+    line-height: 1.2em;
+    border: 1px solid #fcefa1;
+    background-color: #fbf9ee;
+    width: 90%;
 }
 
 .sortable .sortable-item .item {
