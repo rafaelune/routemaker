@@ -101,6 +101,10 @@ p.big{
     min-width: 30em;
     float: left;
 }
+
+.ordered-area {
+  min-height: 100px;
+}
 /*
  * Map css
  */

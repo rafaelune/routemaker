@@ -121,11 +121,13 @@
                     connectWith: '#selected-pedidos-placeholder',
                     placeholder: 'ui-state-highlight'
                 });
+                $('#pedidos-placeholder').disableSelection();
+                
                 $('#selected-pedidos-placeholder').sortable({
                     connectWith: '#pedidos-placeholder',
                     placeholder: 'ui-state-highlight'
                 });
-                $('.sortable').disableSelection();
+                $('#selected-pedidos-placeholder').disableSelection();
 
                 $('#btnNext1').removeClass('disabled');
                 $('#btnNext1').removeAttr('disabled');
