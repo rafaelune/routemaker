@@ -260,6 +260,8 @@
     
     function loadTab3() {
         visual.goToThirdTabFilter();
+        
+        visual.showLoading();
 
         // get pedidos id
         var pedidos_list = $('#selected-pedidos-placeholder .sortable-item').map(
@@ -379,7 +381,6 @@
             '{% url routemaker.views.pedidos_json %}', 
             { entidade: $('#my-map').data('entidade'), 'pedidos[]': [pedidos_list] }, 
             function(retorno) {
-                visual.showLoading();
                 if (retorno.length > 0) {
                     pedidos_json = retorno;
                     $('#instructions li').remove()
