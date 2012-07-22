@@ -1,34 +1,35 @@
-{% load humanize %}
-
 {% for pedido in pedidos %}
     <div id="{{ pedido.id }}" class="ui-state-default sortable-item box">
-        <div class="pull-right">
-            <a href="#" title="Remover item da lista" class="icon-remove" onclick="visual.removeSortableItem({{ pedido.id }});">
-                <i class="icon-remove"></i>
-            </a>
-        </div>
-        <div class="span10 item">
-            <strong>
+        <!--<a href="#" title="Remover item da lista" class="close" onclick="visual.removeSortableItem({{ pedido.id }});">
+            &times;
+        </a>-->
+        <h3>
+            <a href="#">
                 <i class="icon-tag"></i>
                 {{ pedido.numero }}
-            </strong>
-            <span>
-                <i class="icon-calendar"></i>
-                {{ pedido.data }}
-            </span>
-        </div>
+            </a>
+        </h3>
         <div class="span10 item">
-            <span>
-                <i class="icon-certificate"></i>
-                {{ pedido.plano_pagamento }}
-            </span>
-            <span>
-                <i class="icon-shopping-cart"></i>
-                R$ {{ pedido.valor_total|intcomma  }}
-            </span>
-        </div>
-        <div class="span10 item">
-            <a href="#" title="Mais info">{{ pedido.terceiro.nome }}</a>
+            <p>
+                <span>
+                    <i class="icon-calendar"></i>
+                    {{ pedido.data }}
+                </span>
+                <span>
+                    <i class="icon-certificate"></i>
+                    {{ pedido.plano_pagamento }}
+                </span>
+                <span>
+                    <i class="icon-shopping-cart"></i>
+                    {{ pedido.valor_total }}
+                </span>
+            </p>
+            <address>
+                <strong>{{ pedido.terceiro.nome }}</strong><br/>
+                {{ pedido.terceiro.logradouro }}, {{ pedido.terceiro.bairro }}<br/>
+                {{ pedido.terceiro.cidade }} - {{ pedido.terceiro.estado }}, {{ pedido.terceiro.pais }}<br>
+                <a href="mailto:{{ pedido.terceiro.email }}" title="Enviar e-mail">{{ pedido.terceiro.email }}</a>
+            </address>
         </div>
     </div>
 {% endfor %}

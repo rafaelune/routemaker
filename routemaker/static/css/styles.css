@@ -72,14 +72,15 @@ p.big{
 }
 
 .sortable .sortable-item, .ui-state-highlight { 
-    margin: 0 3px 3px 3px;
-    padding: 0.4em;
-    padding-left: 1.5em;
+    margin: 0;
+    padding: 0.4em 0;
     border: 1px solid #cccccc;
     outline: medium none;
     font-size: 13px;
     display: block;
     float: left;
+    zoom: 1;
+    width: 100%;
 }
 
 .ui-state-highlight {
@@ -87,7 +88,6 @@ p.big{
     line-height: 1.2em;
     border: 1px solid #fcefa1;
     background-color: #fbf9ee;
-    width: 90%;
 }
 
 .sortable .sortable-item .item {
@@ -97,9 +97,15 @@ p.big{
     margin: 0;
 }
 
-.sortable .sortable-item .item span, .sortable .sortable-item .item strong{
-    min-width: 30em;
+.sortable .sortable-item .item p, .sortable .sortable-item .item address{
+  margin: 5px 0 5px 5px;
+}
+
+.sortable .sortable-item .item p span{
+    min-width: 10.4em;
     float: left;
+    position: relative;
+    display: block;
 }
 
 .ordered-area {
