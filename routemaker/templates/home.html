@@ -320,7 +320,11 @@
                         lat: location.lat(),
                         lng: location.lng(),
                         infoWindow: {
-                            content: '<strong>' + item._Pedido__terceiro._Terceiro__nome +'</strong>'
+                            content: "<p>" +
+                                     "<strong>" + item._Pedido__terceiro._Terceiro__nome + "</strong><br/>" + 
+                                     "<span>Pedido: " + item._Pedido__numero + "</span><br/>" +
+                                     "<span>Endere&#231;o: " + item._Pedido__terceiro._Terceiro__logradouro + "</span>" +
+                                     "</p>"
                         }
                     });
 
@@ -341,10 +345,12 @@
                         for (var i=0, step; step=steps[i]; i++) {
                             $('#instructions').append('<li>'+step.instructions+'</li>');
                         }
-                        $('#instructions').append('<li>Chegou em:'+ item._Pedido__terceiro._Terceiro__nome +'</li>');
+                        $('#instructions').append('<li>Chegou em <strong>' + item._Pedido__terceiro._Terceiro__logradouro + 
+                            ' - pedido: ' + item._Pedido__numero + ' de '+ item._Pedido__terceiro._Terceiro__nome +'</strong></li>');
                     }
                 } else {
-                    $('#instructions').append('<li>Endereco nao encontrado:'+ item._Pedido__terceiro._Terceiro__nome +'</li>');
+                    $('#instructions').append('<li>Endere&#231;o <strong>' + item._Pedido__terceiro._Terceiro__logradouro + 
+                            ' - pedido: ' + item._Pedido__numero + ' de '+ item._Pedido__terceiro._Terceiro__nome +'</strong> n&#227;o encontrado</li>');
                 }
 
                 counter++;
