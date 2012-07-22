@@ -1,7 +1,7 @@
 # -*- coding: latin-1 -*-
 
 from geographics import PositionApi
-import urllib3, json
+import urllib3, json, locale
 
 class Pedido(object):
     # get id
@@ -210,6 +210,7 @@ class VpsaApi(object):
     def __init__(self, database):
         self.__database = database
         self.__base_url_api = 'https://www.vpsa.com.br/{0}/rest/externo/{1}/'
+        locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil')
 
     def get_base_url_api(self, module):
         return self.__base_url_api.format(module, self.__database)
@@ -316,7 +317,7 @@ class VpsaApi(object):
         pedido.id = pedido_request['id']
         pedido.data = pedido_request['data']
         pedido.numero = pedido_request['numero']
-        pedido.valor_total = pedido_request['valorTotal']
+        pedido.valor_total = locale.currency(float(pedido_request['valorTotal']), grouping=True)
         pedido.plano_pagamento = pedido_request['planoPagamento']
         pedido.representante = pedido_request['representante']
         pedido.terceiro = self.get_terceiro(pedido_request['idTerceiroCliente'], loads_location)
@@ -333,7 +334,7 @@ class VpsaApi(object):
             pedido.id = iterator['id']
             pedido.data = iterator['data']
             pedido.numero = iterator['numero']
-            pedido.valor_total = iterator['valorTotal']
+            pedido.valor_total = locale.currency(float(iterator['valorTotal']), grouping=True)
             pedido.plano_pagamento = iterator['planoPagamento']
             pedido.representante = iterator['representante']
             pedido.terceiro = self.__get_terceiro(entidades, iterator['idTerceiroCliente'])
