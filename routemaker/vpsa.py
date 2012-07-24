@@ -1,7 +1,7 @@
 # -*- coding: latin-1 -*-
 
 from geographics import PositionApi
-import urllib3, json, locale
+import urllib3, json, locale, platform
 
 class Pedido(object):
     # get id
@@ -210,7 +210,8 @@ class VpsaApi(object):
     def __init__(self, database):
         self.__database = database
         self.__base_url_api = 'https://www.vpsa.com.br/{0}/rest/externo/{1}/'
-        #locale.setlocale(locale.LC_ALL, 'pt-br')
+        if platform.system() == 'Windows':
+            locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil')
 
     def get_base_url_api(self, module):
         return self.__base_url_api.format(module, self.__database)
