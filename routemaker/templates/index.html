@@ -4,28 +4,87 @@
 
 {% block content %}
 <!-- Main hero unit for a primary marketing message or call to action -->
-<div class="hero-unit">
-    <h1>VPSA - Route Maker</h1>
-    <p class="big">Conhe&#231;a o sistema de cria&#231;&#227;o de rotas que &#233; integrado ao seu sistema VPSA. N&#227;o perca tempo tendo que cadastrar suas informa&#231;&#245;es em dois sistemas diferentes. Aproveite, fa&#231;a agora seu cadastro e come&#231;e a utilizar nosso sistema.</p>
-    <p><a href="{% url routemaker.views.signup %}" class="btn btn-primary btn-large">Inscreva-se agora &raquo;</a></p>
+<div class="hero-unit logo-title">
+    <h1>route maker</h1>
+    <!--<p class="big">Conhe&#231;a o sistema de cria&#231;&#227;o de rotas que &#233; integrado ao seu sistema VPSA. N&#227;o perca tempo tendo que cadastrar suas informa&#231;&#245;es em dois sistemas diferentes. Aproveite, fa&#231;a agora seu cadastro e come&#231;e a utilizar nosso sistema.</p>
+    <p><a href="{% url routemaker.views.signup %}" class="btn btn-primary btn-large">Inscreva-se agora &raquo;</a></p>-->
+</div>
+
+<!-- caroussel -->
+<div id="ei-slider" class="ei-slider">
+  <ul class="ei-slider-large">
+    <li>
+      <img src="{{ STATIC_URL }}mediabox/media1.jpg" alt="media1"/>
+      <div class="ei-title">
+        <h2>Sistema de criação de rotas, integrado ao</h2>
+        <h3>VPSA</h3>
+      </div>
+    </li>
+    <li>
+      <img src="{{ STATIC_URL }}mediabox/media0.jpg" alt="media2"/>
+      <div class="ei-title">
+        <h2>Simples, intuitivo e amigável</h2>
+      </div>
+    </li>
+    <li>
+      <img src="{{ STATIC_URL }}mediabox/media3.jpg" alt="media3"/>
+      <div class="ei-title">
+        <h2>Acessível de diversos dispositivos e lugares.</h2>
+      </div>
+    </li>
+    <li>
+      <img src="{{ STATIC_URL }}mediabox/media0.jpg" alt="media4"/>
+      <div class="ei-title">
+        <h2>Livre para que você defina a ordem de entrega</h2>
+      </div>
+    </li>
+    <li>
+      <img src="{{ STATIC_URL }}mediabox/media0.jpg" alt="media5"/>
+      <div class="ei-title">
+        <h2>Realize a gestão de suas entregas de um modo mais organizado e se torne mais ágil e competitivo</h2>
+      </div>
+    </li>
+    <li>
+      <img src="{{ STATIC_URL }}mediabox/media0.jpg" alt="media6"/>
+      <div class="ei-title">
+        <h2>Porquê ficar parado ou perdido no trânsito é ruim</h2>
+      </div>
+    </li>
+    <li>
+      <img src="{{ STATIC_URL }}mediabox/media0.jpg" alt="media7"/>
+      <div class="ei-title">
+        <h2>Realize seu cadastro agora mesmo</h2>
+        <h3><a href="{% url routemaker.views.signup %}" class="btn btn-warning btn-large">Inscreva-se agora &raquo;</a></h3>
+      </div>
+    </li>
+  </ul>
+  <ul class="ei-slider-thumbs">
+    <li class="ei-slider-element">Current</li>
+    <li><a href="#">Slide 1</a><img src="{{ STATIC_URL }}mediabox/media1t.jpg" alt="media1" /></li>
+    <li><a href="#">Slide 2</a><img src="{{ STATIC_URL }}mediabox/media0t.jpg" alt="media2" /></li>
+    <li><a href="#">Slide 3</a><img src="{{ STATIC_URL }}mediabox/media3t.jpg" alt="media3" /></li>
+    <li><a href="#">Slide 4</a><img src="{{ STATIC_URL }}mediabox/media0t.jpg" alt="media4" /></li>
+    <li><a href="#">Slide 5</a><img src="{{ STATIC_URL }}mediabox/media0t.jpg" alt="media5" /></li>
+    <li><a href="#">Slide 6</a><img src="{{ STATIC_URL }}mediabox/media0t.jpg" alt="media6" /></li>
+    <li><a href="#">Slide 7</a><img src="{{ STATIC_URL }}mediabox/media0t.jpg" alt="media7" /></li>
+  </ul>
 </div>
 
 <!-- Example row of columns -->
 <div class="row">
     <div class="span4">
-      <h2>Heading</h2>
+      <h2>Sobre</h2>
        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
     </div>
     <div class="span4">
-      <h2>Heading</h2>
+      <h2>Inscreva-se</h2>
        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
+      <p><a class="btn" href="{% url routemaker.views.signup %}">Cadastro &raquo;</a></p>
     </div>
     <div class="span4">
-      <h2>Heading</h2>
-      <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
+      <h2>Entre</h2>
+      <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+      <p><a class="btn" href="{% url routemaker.views.log_in %}">Login &raquo;</a></p>
     </div>
 </div>
 {% endblock %}
@@ -34,6 +93,14 @@
 <script type="text/javascript">
     $(document).ready(function() {
         util.createExternalLinks();
+        $('#ei-slider').eislideshow({
+          animation     : 'center',
+          autoplay      : true,
+          slideshow_interval  : 3000,
+          titlesFactor    : 0
+                });
     });
-</script> 
+</script>
+<script type="text/javascript" src="http://tympanus.net/Tutorials/ElasticSlideshow/js/jquery.eislideshow.js"></script>
+<script type="text/javascript" src="http://tympanus.net/Tutorials/ElasticSlideshow/js/jquery.easing.1.3.js"></script>
 {% endblock %}
