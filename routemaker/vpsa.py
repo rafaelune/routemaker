@@ -210,7 +210,7 @@ class VpsaApi(object):
     def __init__(self, database):
         self.__database = database
         self.__base_url_api = 'https://www.vpsa.com.br/{0}/rest/externo/{1}/'
-        locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil')
+        #locale.setlocale(locale.LC_ALL, 'pt-br')
 
     def get_base_url_api(self, module):
         return self.__base_url_api.format(module, self.__database)
