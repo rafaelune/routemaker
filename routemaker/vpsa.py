@@ -321,7 +321,7 @@ class VpsaApi(object):
         if platform.system() == 'Windows':
             pedido.valor_total = locale.currency(float(pedido_request['valorTotal']), grouping=True)
         else:
-            pedido.valor_total = 'R$' + pedido_request['valorTotal']
+            pedido.valor_total = 'R$' + str(pedido_request['valorTotal'])
         pedido.plano_pagamento = pedido_request['planoPagamento']
         pedido.representante = pedido_request['representante']
         pedido.terceiro = self.get_terceiro(pedido_request['idTerceiroCliente'], loads_location)
@@ -341,7 +341,7 @@ class VpsaApi(object):
             if platform.system() == 'Windows':
                 pedido.valor_total = locale.currency(float(iterator['valorTotal']), grouping=True)
             else:
-                pedido.valor_total = 'R$'+ iterator['valorTotal']
+                pedido.valor_total = 'R$'+ str(iterator['valorTotal'])
             pedido.plano_pagamento = iterator['planoPagamento']
             pedido.representante = iterator['representante']
             pedido.terceiro = self.__get_terceiro(entidades, iterator['idTerceiroCliente'])
