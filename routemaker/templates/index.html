@@ -2,15 +2,42 @@
 
 {% block title %}VPSA - Route Maker{% endblock %}
 
+{% block styles %}
+<link href="{{ STATIC_URL }}css/nivo-slider.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/nivo-slider-theme.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <!-- Main hero unit for a primary marketing message or call to action -->
 <div class="hero-unit logo-title">
     <h1>route maker</h1>
-    <!--<p class="big">Conhe&#231;a o sistema de cria&#231;&#227;o de rotas que &#233; integrado ao seu sistema VPSA. N&#227;o perca tempo tendo que cadastrar suas informa&#231;&#245;es em dois sistemas diferentes. Aproveite, fa&#231;a agora seu cadastro e come&#231;e a utilizar nosso sistema.</p>
-    <p><a href="{% url routemaker.views.signup %}" class="btn btn-primary btn-large">Inscreva-se agora &raquo;</a></p>-->
 </div>
 
 <!-- caroussel -->
+<div class="slider-wrapper theme-default">
+  <div id="slider" class="nivoSlider">
+    <img src="{{ STATIC_URL }}mediabox/media01.png" data-thumb="{{ STATIC_URL }}mediabox/media01.png" alt="" title="#slide01-caption" />
+    <img src="{{ STATIC_URL }}mediabox/media0.jpg" data-thumb="{{ STATIC_URL }}mediabox/media0.jpg" alt="" title="#slide02-caption" />
+    <img src="{{ STATIC_URL }}mediabox/media03.png" data-thumb="{{ STATIC_URL }}mediabox/media03.png" alt="" title="#slide03-caption" />
+    <img src="{{ STATIC_URL }}mediabox/media0.jpg" data-thumb="{{ STATIC_URL }}mediabox/media0.jpg" alt="" data-transition="slideInLeft" />
+    <img src="{{ STATIC_URL }}mediabox/media1.jpg" data-thumb="{{ STATIC_URL }}mediabox/media1.jpg" alt="" title="#htmlcaption" />
+  </div>
+  <div id="slide01-caption" class="nivo-html-caption">
+    <h3>Sistema de criação de rotas, integrado ao</h3>
+    <h3>VPSA</h3>
+  </div>
+  <div id="slide02-caption" class="nivo-html-caption">
+    <h3>Simples, intuitivo e amigável</h3>
+  </div>
+  <div id="slide03-caption" class="nivo-html-caption">
+    <h3>Acessível de diversos dispositivos e lugares.</h3>
+  </div>
+  <div id="htmlcaption" class="nivo-html-caption">
+    <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>. 
+  </div>
+</div>
+
+<!--
 <div id="ei-slider" class="ei-slider">
   <ul class="ei-slider-large">
     <li>
@@ -68,7 +95,7 @@
     <li><a href="#">Slide 6</a><img src="{{ STATIC_URL }}mediabox/media0t.jpg" alt="media6" /></li>
     <li><a href="#">Slide 7</a><img src="{{ STATIC_URL }}mediabox/media0t.jpg" alt="media7" /></li>
   </ul>
-</div>
+</div>-->
 
 <!-- Example row of columns -->
 <div class="row">
@@ -93,14 +120,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         util.createExternalLinks();
-        $('#ei-slider').eislideshow({
-          animation     : 'center',
-          autoplay      : true,
-          slideshow_interval  : 3000,
-          titlesFactor    : 0
-                });
+        $('#slider').nivoSlider();
     });
 </script>
-<script type="text/javascript" src="http://tympanus.net/Tutorials/ElasticSlideshow/js/jquery.eislideshow.js"></script>
-<script type="text/javascript" src="http://tympanus.net/Tutorials/ElasticSlideshow/js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.nivo.slider.js"></script>
 {% endblock %}
