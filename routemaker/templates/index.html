@@ -8,23 +8,17 @@
 {% endblock %}
 
 {% block content %}
-<!-- Main hero unit for a primary marketing message or call to action -->
-<div class="hero-unit logo-title">
-    <h1>route maker</h1>
-</div>
 
 <!-- caroussel -->
 <div class="slider-wrapper theme-default">
   <div id="slider" class="nivoSlider">
     <img src="{{ STATIC_URL }}mediabox/media01.png" data-thumb="{{ STATIC_URL }}mediabox/media01.png" alt="" title="#slide01-caption" />
-    <img src="{{ STATIC_URL }}mediabox/media0.jpg" data-thumb="{{ STATIC_URL }}mediabox/media0.jpg" alt="" title="#slide02-caption" />
+    <img src="{{ STATIC_URL }}mediabox/media02.png" data-thumb="{{ STATIC_URL }}mediabox/media02.png" alt="" title="#slide02-caption" />
     <img src="{{ STATIC_URL }}mediabox/media03.png" data-thumb="{{ STATIC_URL }}mediabox/media03.png" alt="" title="#slide03-caption" />
-    <img src="{{ STATIC_URL }}mediabox/media0.jpg" data-thumb="{{ STATIC_URL }}mediabox/media0.jpg" alt="" data-transition="slideInLeft" />
-    <img src="{{ STATIC_URL }}mediabox/media1.jpg" data-thumb="{{ STATIC_URL }}mediabox/media1.jpg" alt="" title="#htmlcaption" />
+    <img src="{{ STATIC_URL }}mediabox/media04.png" data-thumb="{{ STATIC_URL }}mediabox/media04.png" alt="" title="#slide04-caption" data-transition="slideInLeft" />
   </div>
   <div id="slide01-caption" class="nivo-html-caption">
-    <h3>Sistema de criação de rotas, integrado ao</h3>
-    <h3>VPSA</h3>
+    <h3>Sistema de criação de rotas, integrado ao VPSA</h3>
   </div>
   <div id="slide02-caption" class="nivo-html-caption">
     <h3>Simples, intuitivo e amigável</h3>
@@ -32,8 +26,8 @@
   <div id="slide03-caption" class="nivo-html-caption">
     <h3>Acessível de diversos dispositivos e lugares.</h3>
   </div>
-  <div id="htmlcaption" class="nivo-html-caption">
-    <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>. 
+  <div id="slide04-caption" class="nivo-html-caption">
+    <h3>Realize seu cadastro agora mesmo. <a href="{% url routemaker.views.signup %}" class="btn btn-warning">Inscreva-se agora &raquo;</a></h3>
   </div>
 </div>
 
@@ -106,12 +100,12 @@
     <div class="span4">
       <h2>Inscreva-se</h2>
        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-      <p><a class="btn" href="{% url routemaker.views.signup %}">Cadastro &raquo;</a></p>
+      <p><a class="btn btn-large" href="{% url routemaker.views.signup %}">Cadastro &raquo;</a></p>
     </div>
     <div class="span4">
       <h2>Entre</h2>
       <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-      <p><a class="btn" href="{% url routemaker.views.log_in %}">Login &raquo;</a></p>
+      <p><a class="btn btn-large" href="{% url routemaker.views.log_in %}">Login &raquo;</a></p>
     </div>
 </div>
 {% endblock %}
