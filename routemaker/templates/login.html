@@ -3,29 +3,25 @@
 {% block title %}VPSA - Route Maker - Login{% endblock %}
 
 {% block content %}
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-<form action="{% url routemaker.views.log_in %}" method="post" class="form-inline">{% csrf_token %}
+<form action="{% url routemaker.views.log_in %}" method="post" class="form-inline form-single">{% csrf_token %}
     <fieldset>
-        <legend>Cadastro</legend>
+        <legend>Login</legend>
+        {% for message in messages %}
+        <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %}">
+          {{ message }}
+        </div>
+        {% endfor %}
+
         {% for field in form %}
         <div class="control-group">
             <label class="control-label" for="{{ field.html_name }}">{{ field.label }}:</label>
             <div class="controls">
                 {{ field }}
-                {{ field.errors }}
+                {% if field.errors %}
+                <div class="alert">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

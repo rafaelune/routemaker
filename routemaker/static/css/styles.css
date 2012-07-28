@@ -1,8 +1,8 @@
+/* Home Carrousel */
 .slider-wrapper { 
   width: 80%; 
   margin: 20px auto;
 }
-
 .theme-default #slider {
     margin:100px auto 0 auto;
 }
@@ -10,21 +10,16 @@
 .theme-orman.slider-wrapper {
     margin-top:150px;
 }
-
-
-
-
+/* Main */
 .d_n {
     display: none;
 }
-
 body{
   background:#f3f3f3;
   margin:0;
   padding:0;
   font-family: 'Helvetica', 'Arial', sans-serif;
 }
-
 h1{
   font-family: 'Convergence';
   text-align: center;
@@ -46,20 +41,17 @@ p.big{
   color:#333;
   margin: 20px 0 50px 0;
 }
-
 .logo-menu {
     font-family: 'Convergence';
     color: #ffffff;
     background: url("../img/logor.png") no-repeat scroll 0px 10px transparent
 }
-
 .logo-title{
   margin: 0;
   background-color: transparent;
   border: none;
   padding: 60px 0 20px;
 }
-
 /* User database */
 .database-user {
     display: block;
@@ -74,17 +66,17 @@ p.big{
     border-radius: 3px 3px 3px 3px;
     box-shadow: 0 1px 0 #ffffff inset;
 }
-
 .white-box {
   box-shadow: 0 0 20px #999;
   background: #ffffff;
   border-radius: 2px;
   padding: 15px;
 }
-
-/* 
- * Sortable list
- */
+/* Single form page */
+.form-single {
+  margin: 50px 0 18px;
+}
+/* Sortable list */
 .sortable {
     list-style-type: none;
     margin: 0;
@@ -94,7 +86,6 @@ p.big{
     padding: 5px;
     width: 100%;
 }
-
 .sortable .sortable-item, .ui-state-highlight { 
     margin: 0;
     padding: 0.4em 0;
@@ -106,38 +97,31 @@ p.big{
     zoom: 1;
     width: 100%;
 }
-
 .ui-state-highlight {
     height: 1.5em;
     line-height: 1.2em;
     border: 1px solid #fcefa1;
     background-color: #fbf9ee;
 }
-
 .sortable .sortable-item .item {
     width: 100%;
     float: left;
     display: block;
     margin: 0;
 }
-
 .sortable .sortable-item .item p, .sortable .sortable-item .item address{
   margin: 5px 0 5px 5px;
 }
-
 .sortable .sortable-item .item p span{
     min-width: 10.4em;
     float: left;
     position: relative;
     display: block;
 }
-
 .ordered-area {
   min-height: 100px;
 }
-/*
- * Map css
- */
+/* Map css */
 .map-normal img {
   max-width: none;
 }
@@ -179,14 +163,10 @@ p.big{
   border-right:16px solid transparent;
   border-bottom:16px solid #336699;
 }
-
-/* 
- * Bootstrap css overrides 
- */
+/* Bootstrap css overrides */
 .sidebar-nav {
     padding-top: 20px;
 }
-
 /* Site Footer */
 footer p{
     text-align: center;
