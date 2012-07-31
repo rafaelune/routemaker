@@ -43,6 +43,12 @@
                         {% include "route/filter-form.html" %}
                     </div>
                     <div class="d_n tab-pane" id="tab2">
+                        <div class="alert alert-info">
+                            <a class="close" data-dismiss="alert" href="#">&times;</a>
+                            <h4 class="alert-heading">Dica</h4>
+                            Defina o ponto de partida das entregas.
+                        </div>
+
                         <form id="filterForm" method="post" class="well form-inline">{% csrf_token %}
                             <input type="text" id="endereco" class="input-big" placeholder="Endere&#231;o">
                             <a href="#" id="buscar" class="btn btn-small btn-info" title="Buscar pelo endere&#231;o">Buscar pelo endere&#231;o</a>

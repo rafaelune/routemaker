@@ -1,3 +1,9 @@
+<div class="alert alert-info">
+	<a class="close" data-dismiss="alert" href="#">&times;</a>
+	<h4 class="alert-heading">Dica</h4>
+	Primeiramente, você deve selecionar o representante comercial.
+</div>
+
 <form id="filterForm" action="{% url routemaker.views.pedidos_search %}" method="post" class="well form-inline">{% csrf_token %}
 	{% for field in form %}
 		{{ field }}
