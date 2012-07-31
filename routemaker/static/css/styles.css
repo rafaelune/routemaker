@@ -41,10 +41,18 @@ p.big{
   color:#333;
   margin: 20px 0 50px 0;
 }
+/* Logos */
+.brand {
+  font-family: 'Convergence';
+  color: #ffffff;
+}
 .logo-menu {
-    font-family: 'Convergence';
-    color: #ffffff;
-    background: url("../img/logor.png") no-repeat scroll 0px 10px transparent
+    background: url("../img/logor.png") no-repeat scroll 0px 5px transparent;
+    width: 16px;
+    height: 21px;
+    display: inline-block;
+    vertical-align: text-top;
+    margin: 0 5px auto 10px;
 }
 .logo-title{
   margin: 0;
