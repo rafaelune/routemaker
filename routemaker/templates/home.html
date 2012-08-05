@@ -232,7 +232,7 @@
                 visual.closeLoading();
             },
             error: function(error) {
-                startsLat = geoip_latitude;
+                startsLat = geoip_latitude();
                 startsLng = geoip_longitude();
 
                 // use MaxMind IP to location API fallback
@@ -258,7 +258,7 @@
                 visual.closeLoading();
             },
             not_supported: function() {
-                startsLat = geoip_latitude;
+                startsLat = geoip_latitude();
                 startsLng = geoip_longitude();
 
                 // use MaxMind IP to location API fallback
