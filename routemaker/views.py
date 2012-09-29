@@ -6,7 +6,6 @@ from django.template import RequestContext
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
 from forms import FilterPedidoForm
-from models import UserProfile
 from vpsa import VpsaApi2
 import jsonpickle, urllib3
 

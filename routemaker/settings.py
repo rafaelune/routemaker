@@ -33,7 +33,6 @@ DATABASES = {
 VPSA_APP_ID = '50532f60d93a4b7a7c000004'
 VPSA_APP_SECRET = '8a9def34f7d193c612ac74bc73f0b3c4a13ad6a0037ce7aebac37cd5afa14998'
 
-AUTH_PROFILE_MODULE = 'routemaker.UserProfile'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
