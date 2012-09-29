@@ -1,7 +1,10 @@
 # -*- coding: latin-1 -*-
 
-from geographics import PositionApi
-import urllib3, json, locale, platform
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
+from urllib2 import Request, urlopen, URLError, HTTPError
+import urllib3, urllib2, urllib, json, locale, platform, httplib
 
 class Pedido(object):
     # get id
@@ -145,14 +148,6 @@ class Terceiro(object):
     @bairro.setter
     def bairro(self, bairro):
         self.__bairro = bairro
-    # get pais
-    @property
-    def pais(self):
-        return self.__pais
-    # set pais
-    @pais.setter
-    def pais(self, pais):
-        self.__pais = pais
     # get logradouro
     @property
     def logradouro(self):
@@ -206,144 +201,238 @@ class Entidade(object):
     def nome(self, nome):
         self.__nome = nome
 
-class VpsaApi(object):
-    def __init__(self, database):
-        self.__database = database
-        self.__base_url_api = 'https://www.vpsa.com.br/{0}/rest/externo/{1}/'
-        if platform.system() == 'Windows':
-            locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil')
+class TokenAcesso(object):
+    # get access_token
+    @property
+    def access_token(self):
+        return self.__access_token
+    # set access_token
+    @access_token.setter
+    def access_token(self, access_token):
+        self.__access_token = access_token
 
-    def get_base_url_api(self, module):
-        return self.__base_url_api.format(module, self.__database)
+    # get expires_in
+    @property
+    def expires_in(self):
+        return self.__expires_in
+    # set expires_in
+    @expires_in.setter
+    def expires_in(self, expires_in):
+        self.__expires_in = expires_in
 
-    def is_valid_database(self):
-        http = urllib3.PoolManager()
-        request = http.request('GET', self.get_base_url_api('vpsa') + 'entidades/')
-        return request.status == 200
+    # get refresh_token
+    @property
+    def refresh_token(self):
+        return self.__refresh_token
+    # set refresh_token
+    @refresh_token.setter
+    def refresh_token(self, refresh_token):
+        self.__refresh_token = refresh_token
 
-    def get_entidades(self):
-        http = urllib3.PoolManager()
-        request = http.request('GET', self.get_base_url_api('vpsa') + 'entidades/')
-        entidades_request = json.loads(request.data) # Parse JSON
-        entidades = []
-        for iterator in entidades_request:
-            entidade = Entidade(id = iterator['id'], nome = iterator['nome'])
-            entidades.append(entidade)
-        return entidades
+    # get cnpj_empresa
+    @property
+    def cnpj_empresa(self):
+        return self.__cnpj_empresa
+    # set cnpj_empresa
+    @cnpj_empresa.setter
+    def cnpj_empresa(self, cnpj_empresa):
+        self.__cnpj_empresa = cnpj_empresa
 
-    def get_terceiros(self, loads_location=False):
-        http = urllib3.PoolManager()
-        request = http.request('GET', self.get_base_url_api('vpsa') + 'terceiros/')
-        terceiros_request = json.loads(request.data) # Parse JSON
-        terceiros = []
-        for iterator in terceiros_request:
-            terceiro = Terceiro()
-            terceiro.id = iterator['id']
-            terceiro.identificacao = iterator['identificacao']
-            terceiro.nome = iterator['nome']
-            terceiro.email = iterator['email']
+    # get terceiro_id
+    @property
+    def terceiro_id(self):
+        return self.__terceiro_id
+    # set terceiro_id
+    @terceiro_id.setter
+    def terceiro_id(self, terceiro_id):
+        self.__terceiro_id = terceiro_id
+
+    # get terceiro_nome
+    @property
+    def terceiro_nome(self):
+        return self.__terceiro_nome
+    # set terceiro_nome
+    @terceiro_nome.setter
+    def terceiro_nome(self, terceiro_nome):
+        self.__terceiro_nome = terceiro_nome
+
+class VpsaApi2(object):
+    def __init__(self):
+        current_site = Site.objects.get_current()
+        domain_site = current_site.domain
+        callback_url = reverse('callback', args=None)
+
+        self.__app__id = getattr(settings, 'VPSA_APP_ID')
+        self.__app__secret = getattr(settings, 'VPSA_APP_SECRET')
+        self.__redirect__uri = domain_site + callback_url
+        self.__oauth__url = 'https://www.vpsa.com.br/apps/oauth/authorization?response_type=code&app_id={0}&redirect_uri={1}'
+        self.__entidades__url = 'https://www.vpsa.com.br/apps/api/entidades'
+        self.__pedidos__url = 'https://www.vpsa.com.br/apps/api/pedidos/'
+        self.__terceiro__url = 'https://www.vpsa.com.br/apps/api/terceiros/'
+
+    def get_oauth_url(self):
+        return self.__oauth__url.format(self.__app__id, self.__redirect__uri)
+
+    def get_token_accesso(self, auth_code):
+        body_fields = {
+            'grant_type': 'authorization_code',
+            'app_id': self.__app__id,
+            'app_secret': self.__app__secret,
+            'redirect_uri': self.__redirect__uri,
+            'code': auth_code
+        }
+
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        request = urllib2.Request('https://www.vpsa.com.br/apps/oauth/token', json.dumps(body_fields))
+        request.add_header('Content-Type', 'application/json')
+
+        token_acesso = None
+        try:
+            response = urllib2.urlopen(request)
+            response_data = json.loads(response.read())
+            print response_data
             
-            if iterator['endereco'] != None:
-
-                if iterator['endereco']['cidade'] != None:
-                    terceiro.cidade = iterator['endereco']['cidade']
-                else:
-                    terceiro.cidade = ''
-                
-                if iterator['endereco']['logradouro'] != None:
-                    terceiro.logradouro = iterator['endereco']['logradouro']
-                else:
-                    terceiro.logradouro = ''
-                
-                if iterator['endereco']['bairro'] != None:
-                    terceiro.bairro = iterator['endereco']['bairro']
-                else:
-                    terceiro.bairro = ''
-                
-                if iterator['endereco']['pais'] != None:
-                    terceiro.pais = iterator['endereco']['pais']
-                else:
-                    terceiro.pais = ''
-                
-                if iterator['endereco']['siglaEstado'] != None:
-                    terceiro.estado = iterator['endereco']['siglaEstado']
-                else:
-                    terceiro.estado = ''
-                
-                if loads_location == True:
-                    position_api = PositionApi()
-                    location = position_api.get_location_by_address(terceiro.get_full_address())
-                    if location != None:
-                        terceiro.set_geolocation(location.lat, location.lng)
-
-            terceiros.append(terceiro)
-        return terceiros
-
-    def get_terceiro(self, terceiro_id, loads_location=False):
-        http = urllib3.PoolManager()
-        request = http.request('GET', self.get_base_url_api('vpsa') + 'terceiros/' + str(terceiro_id))
-        terceiros_request = json.loads(request.data) # Parse JSON
-        terceiro = Terceiro()
-        terceiro.id = terceiros_request['id']
-        terceiro.identificacao = terceiros_request['identificacao']
-        terceiro.nome = terceiros_request['nome']
-        terceiro.email = terceiros_request['email']
-        
-        if terceiros_request['endereco'] != None:
-            terceiro.cidade = terceiros_request['endereco']['cidade']
-            terceiro.logradouro = terceiros_request['endereco']['logradouro']
-            terceiro.bairro = terceiros_request['endereco']['bairro']
-            terceiro.pais = terceiros_request['endereco']['pais']
-            terceiro.estado = terceiros_request['endereco']['siglaEstado']
-            
-            if loads_location == True:
-                position_api = PositionApi()
-                location = position_api.get_location_by_address(terceiro.get_full_address())
-                if location != None:
-                    terceiro.set_geolocation(location.lat, location.lng)
-        
-        return terceiro
-
-    def __get_terceiro(self, terceiros, terceiro_id):
-        for item in terceiros:
-            if item.id == terceiro_id:
-                return item
-        return None
-
-    def get_pedido(self, entidade_id, pedido_id, loads_location=False):
-        http = urllib3.PoolManager()
-        request = http.request('GET', self.get_base_url_api('estoque') + str(entidade_id) + '/pedidos/' + str(pedido_id))
-        pedido_request = json.loads(request.data) # Parse JSON
-        pedido = Pedido()
-        pedido.id = pedido_request['id']
-        pedido.data = pedido_request['data']
-        pedido.numero = pedido_request['numero']
-        if platform.system() == 'Windows':
-            pedido.valor_total = locale.currency(float(pedido_request['valorTotal']), grouping=True)
+            token_acesso = TokenAcesso()
+            token_acesso.access_token = response_data['access_token']
+            token_acesso.expires_in = response_data['expires_in']
+            token_acesso.refresh_token = response_data['refresh_token']
+            token_acesso.terceiro_id = response_data['id_terceiro']
+            token_acesso.terceiro_nome = response_data['nome_terceiro']
+            token_acesso.cnpj_empresa = response_data['cnpj_empresa']
+        except URLError, e:
+            print e.read()
         else:
-            pedido.valor_total = 'R$' + str(pedido_request['valorTotal'])
-        pedido.plano_pagamento = pedido_request['planoPagamento']
-        pedido.representante = pedido_request['representante']
-        pedido.terceiro = self.get_terceiro(pedido_request['idTerceiroCliente'], loads_location)
-        return pedido
+            pass
+        finally:
+            return token_acesso
 
-    def get_pedidos(self, entidade_id, loads_location=False):
-        http = urllib3.PoolManager()
-        request = http.request('GET', self.get_base_url_api('estoque') + str(entidade_id) + '/pedidos/')
-        pedidos_request = json.loads(request.data) # Parse JSON
-        pedidos = []
-        entidades = self.get_terceiros(loads_location)
-        for iterator in pedidos_request:
+    def __request__data(self, url, token, entidades=None):
+        url += '?token=' + token
+
+        if entidades != None:
+            url += '&entidades=' + entidades
+
+        request = urllib2.Request(url)
+        response = urllib2.urlopen(request)
+        return json.loads(response.read())
+
+    def is_token_valid(self, token_acesso):
+        entidades = self.get_entidades(token_acesso)
+        return (entidades != None and len(entidades) > 0)
+
+    def get_entidades(self, token_acesso):
+        lista_entidades = []
+        response_data = None
+
+        try:
+            response_data = self.__request__data(self.__entidades__url, token_acesso.access_token)
+            if response_data == None:
+                response_data = self.__request__data(self.__entidades__url, token_acesso.refresh_token)
+
+            for iterator in response_data:
+                entidade = Entidade(id = iterator['id'], nome = iterator['nome'])
+                lista_entidades.append(entidade)
+
+        except URLError, e:
+            print e.read()
+        else:
+            pass
+        finally:
+            return lista_entidades
+
+    def get_terceiro(self, token_acesso, terceiro_id):
+        terceiro = None
+        response_data = None
+
+        try:
+            response_data = self.__request__data(self.__terceiro__url + str(terceiro_id), token_acesso.access_token)
+            if response_data == None:
+                response_data = self.__request__data(self.__terceiro__url + str(terceiro_id), token_acesso.refresh_token)
+
+            terceiro = Terceiro()
+            terceiro.id = response_data['id']
+            terceiro.nome = response_data['nome']
+            terceiro.identificacao = response_data['identificacao']
+            
+            terceiro.email = response_data['emails'][0]
+            
+            if response_data['enderecos'] != None:
+                terceiro.cidade = response_data['enderecos'][0]['cidade']
+                terceiro.logradouro = response_data['enderecos'][0]['logradouro']
+                terceiro.bairro = response_data['enderecos'][0]['bairro']
+                terceiro.estado = response_data['enderecos'][0]['siglaEstado']
+
+        except URLError, e:
+            print e.read()
+        else:
+            pass
+        finally:
+            return terceiro
+
+    def get_pedido(self, token_acesso, pedido_id):
+        response_data = None
+        pedido = None
+        print pedido_id
+        print self.__pedidos__url + str(pedido_id)
+        try:
+            response_data = self.__request__data(self.__pedidos__url + str(pedido_id), token_acesso.access_token)
+            if response_data == None:
+                response_data = self.__request__data(self.__pedidos__url + str(pedido_id), token_acesso.refresh_token)
+
             pedido = Pedido()
-            pedido.id = iterator['id']
-            pedido.data = iterator['data']
-            pedido.numero = iterator['numero']
-            if platform.system() == 'Windows':
-                pedido.valor_total = locale.currency(float(iterator['valorTotal']), grouping=True)
-            else:
+            pedido.id = response_data['id']
+            pedido.data = response_data['data']
+            pedido.numero = response_data['numero']
+            # not working on heroku
+            #pedido.valor_total = locale.currency(float(iterator['valorTotal']), grouping=True)
+            pedido.valor_total = 'R$'+ str(response_data['valorTotal'])
+            pedido.plano_pagamento = response_data['planoPagamento']
+            #pedido.representante = iterator['representante']
+            pedido.terceiro = self.get_terceiro(token_acesso, response_data['idTerceiroCliente'])
+        except URLError, e:
+            print e.read()
+        else:
+            pass
+        finally:
+            return pedido
+        
+    def get_pedidos(self, token_acesso, entidade_id):
+        lista_pedidos = []
+        response_data = None
+
+        try:
+            response_data = self.__request__data(
+                self.__pedidos__url, 
+                token_acesso.access_token,
+                entidades=entidade_id
+                )
+            if response_data == None:
+                response_data = self.__request__data(
+                    self.__pedidos__url, 
+                    token_acesso.refresh_token,
+                    entidades=entidade_id
+                    )
+
+            for iterator in response_data:
+                pedido = Pedido()
+
+                pedido.id = iterator['id']
+                pedido.data = iterator['data']
+                pedido.numero = iterator['numero']
+                # not working on heroku
+                #pedido.valor_total = locale.currency(float(iterator['valorTotal']), grouping=True)
                 pedido.valor_total = 'R$'+ str(iterator['valorTotal'])
-            pedido.plano_pagamento = iterator['planoPagamento']
-            pedido.representante = iterator['representante']
-            pedido.terceiro = self.__get_terceiro(entidades, iterator['idTerceiroCliente'])
-            pedidos.append(pedido)
-        return pedidos
+                pedido.plano_pagamento = iterator['planoPagamento']
+                #pedido.representante = iterator['representante']
+                pedido.terceiro = self.get_terceiro(token_acesso, iterator['idTerceiroCliente'])
+                lista_pedidos.append(pedido)
+
+        except URLError, e:
+            print e.read()
+        else:
+            pass
+        finally:
+            return lista_pedidos

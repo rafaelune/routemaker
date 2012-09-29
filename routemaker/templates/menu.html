@@ -1,7 +1,7 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            {% if user.is_authenticated %}
+            {% if is_authenticated %}
             <a class="brand" href="{% url routemaker.views.home %}" title="P&#225;gina Inicial"><i class="logo-menu"></i>route maker</a>
             {% else %}
             <a class="brand" href="{% url routemaker.views.index %}" title="P&#225;gina Inicial"><i class="logo-menu"></i>route maker</a>
@@ -13,20 +13,20 @@
                 <span class="icon-bar"></span>
             </a>
 
-            {% if user.is_authenticated %}
+            {% if is_authenticated %}
             <div class="btn-group pull-right">
                 <a class="btn dropdown-toggle" href="#" data-toggle="dropdown">
                     <i class="icon-user"></i>
-                    {{ user.username }}
+                    {{ nome_terceiro }}
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>
+                    <!--<li>
                         <a href="#">Profile</a>
                     </li>
                     <li>
                         <a href="#">Settings</a>
-                    </li>
+                    </li>-->
                     <li>
                         <a class="cookie-delete" href="#">Delete Cookies</a>
                     </li>

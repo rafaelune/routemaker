@@ -16,6 +16,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    # Pagina de retorno callback oauth
+    url(r'^callback/$', 'routemaker.views.oauth_callback', name='callback'),
+
     # Ajax filtro de pedidos
     (r'^filtro/$', 'routemaker.views.pedidos_search'),
 
@@ -24,9 +27,6 @@ urlpatterns = patterns('',
 
     # Pagina principal
     (r'^home/$', 'routemaker.views.home'),
-
-    # Form de cadastro
-    (r'^cadastro/$', 'routemaker.views.signup'),
 
     # Form de login
     (r'^login/$', 'routemaker.views.log_in'),

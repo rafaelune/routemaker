@@ -6,6 +6,7 @@
 <form action="{% url routemaker.views.signup %}" method="post" class="form-horizontal form-single">{% csrf_token %}
     <fieldset>
         <legend>Cadastro</legend>
+        {{ nome_terceiro }}
         {% if messages %}
         {% for message in messages %}
         <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %}">
