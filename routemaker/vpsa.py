@@ -347,6 +347,8 @@ class VpsaApi2(object):
         terceiro = None
         response_data = None
 
+        print 'requisicao get_terceiro inicio'
+
         try:
             response_data = self.__request__data(self.__terceiro__url + str(terceiro_id), token_acesso.access_token)
             if response_data == None:
@@ -364,6 +366,8 @@ class VpsaApi2(object):
                 terceiro.logradouro = response_data['enderecos'][0]['logradouro']
                 terceiro.bairro = response_data['enderecos'][0]['bairro']
                 terceiro.estado = response_data['enderecos'][0]['siglaEstado']
+
+            print 'requisicao get_terceiro fim'
 
         except URLError, e:
             print e.read()
@@ -403,6 +407,7 @@ class VpsaApi2(object):
         lista_pedidos = []
         response_data = None
 
+        print 'requisicao get_pedidos inicio'
         try:
             response_data = self.__request__data(
                 self.__pedidos__url, 
@@ -430,6 +435,7 @@ class VpsaApi2(object):
                 pedido.terceiro = self.get_terceiro(token_acesso, iterator['idTerceiroCliente'])
                 lista_pedidos.append(pedido)
 
+            print 'requisicao get_pedidos fim'
         except URLError, e:
             print e.read()
         else:
