@@ -407,6 +407,7 @@ class VpsaApi2(object):
         lista_pedidos = []
         response_data = None
 
+        contador = 1
         print 'requisicao get_pedidos inicio'
         try:
             response_data = self.__request__data(
@@ -422,6 +423,9 @@ class VpsaApi2(object):
                     )
 
             for iterator in response_data:
+                print 'pedido: ' + str(contador)
+                contador = contador + 1
+                
                 pedido = Pedido()
 
                 pedido.id = iterator['id']
