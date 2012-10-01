@@ -293,7 +293,6 @@ class VpsaApi2(object):
         try:
             response = urllib2.urlopen(request)
             response_data = json.loads(response.read())
-            print response_data
             
             token_acesso = TokenAcesso()
             token_acesso.access_token = response_data['access_token']
@@ -347,8 +346,6 @@ class VpsaApi2(object):
         terceiro = None
         response_data = None
 
-        print 'requisicao get_terceiro inicio'
-
         try:
             response_data = self.__request__data(self.__terceiro__url + str(terceiro_id), token_acesso.access_token)
             if response_data == None:
@@ -367,48 +364,17 @@ class VpsaApi2(object):
                 terceiro.bairro = response_data['enderecos'][0]['bairro']
                 terceiro.estado = response_data['enderecos'][0]['siglaEstado']
 
-            print 'requisicao get_terceiro fim'
-
         except URLError, e:
             print e.read()
         else:
             pass
         finally:
             return terceiro
-
-    def get_pedido(self, token_acesso, pedido_id):
-        response_data = None
-        pedido = None
-        print pedido_id
-        print self.__pedidos__url + str(pedido_id)
-        try:
-            response_data = self.__request__data(self.__pedidos__url + str(pedido_id), token_acesso.access_token)
-            if response_data == None:
-                response_data = self.__request__data(self.__pedidos__url + str(pedido_id), token_acesso.refresh_token)
-
-            pedido = Pedido()
-            pedido.id = response_data['id']
-            pedido.data = response_data['data']
-            pedido.numero = response_data['numero']
-            # not working on heroku
-            #pedido.valor_total = locale.currency(float(iterator['valorTotal']), grouping=True)
-            pedido.valor_total = 'R$'+ str(response_data['valorTotal'])
-            pedido.plano_pagamento = response_data['planoPagamento']
-            #pedido.representante = iterator['representante']
-            pedido.terceiro = self.get_terceiro(token_acesso, response_data['idTerceiroCliente'])
-        except URLError, e:
-            print e.read()
-        else:
-            pass
-        finally:
-            return pedido
         
     def get_pedidos(self, token_acesso, entidade_id):
         lista_pedidos = []
         response_data = None
 
-        contador = 1
-        print 'requisicao get_pedidos inicio'
         try:
             response_data = self.__request__data(
                 self.__pedidos__url, 
@@ -423,9 +389,6 @@ class VpsaApi2(object):
                     )
 
             for iterator in response_data:
-                print 'pedido: ' + str(contador)
-                contador = contador + 1
-                
                 pedido = Pedido()
 
                 pedido.id = iterator['id']
@@ -436,10 +399,11 @@ class VpsaApi2(object):
                 pedido.valor_total = 'R$'+ str(iterator['valorTotal'])
                 pedido.plano_pagamento = iterator['planoPagamento']
                 #pedido.representante = iterator['representante']
-                pedido.terceiro = self.get_terceiro(token_acesso, iterator['idTerceiroCliente'])
+                pedido.terceiro_id = iterator['idTerceiroCliente']
+
                 lista_pedidos.append(pedido)
 
-            print 'requisicao get_pedidos fim'
+            lista_pedidos[0].terceiro = self.get_terceiro(token_acesso, lista_pedidos[0].terceiro_id)
         except URLError, e:
             print e.read()
         else:

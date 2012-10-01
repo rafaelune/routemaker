@@ -111,6 +111,9 @@ p.big{
     border: 1px solid #fcefa1;
     background-color: #fbf9ee;
 }
+.sortable .sortable-item .ui-state-active {
+  min-height: 30px;
+}
 .sortable .sortable-item .item {
     width: 100%;
     float: left;

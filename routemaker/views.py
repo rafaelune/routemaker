@@ -51,6 +51,9 @@ def log_out(request):
     if request.session.has_key('token'):
         del request.session['token']
 
+    if request.session.has_key('pedidos'):
+        del request.session['pedidos']
+
     return HttpResponseRedirect('/')
 
 def home(request):
@@ -80,6 +83,12 @@ def pedidos_search(request):
 
         vpsa_api2 = VpsaApi2()
         pedidos = vpsa_api2.get_pedidos(token_acesso, entidade)
+        
+        # salva os pedidos em session
+        if request.session.has_key('pedidos'):
+            del request.session['pedidos']
+        request.session['pedidos'] = pedidos
+
         return render_to_response('ajax/filter-result.html', 
             locals(), 
             context_instance=RequestContext(request)
@@ -87,10 +96,31 @@ def pedidos_search(request):
     else:
         return HttpResponseRedirect('/')
 
+def cliente_endereco_json(request):
+    terceiro = None
+
+    if request.session.has_key('token') and request.session.has_key('pedidos') and request.method == 'GET':
+        token_acesso = request.session['token']
+        pedido_id = request.GET.get('pedido_id')
+        pedidos = request.session['pedidos']
+
+        vpsa_api2 = VpsaApi2()
+
+        for pedido in pedidos:
+            if str(pedido.id) == str(pedido_id):
+                terceiro = vpsa_api2.get_terceiro(token_acesso, pedido.terceiro_id)
+                pedido.terceiro = terceiro
+
+        request.session['pedidos'] = pedidos
+    
+    retorno = jsonpickle.encode(terceiro)
+    return HttpResponse(retorno, mimetype="text/javascript")
+
 def pedidos_json(request):
     pedidos_json = []
 
-    if request.session.has_key('token') and request.method == 'GET':
+    if request.session.has_key('token') and request.session.has_key('pedidos') and request.method == 'GET':
+        pedidos = request.session['pedidos']
         pedidos_ids = request.GET.get('pedidos[]')
         token_acesso = request.session['token']
         vpsa_api2 = VpsaApi2()
@@ -99,8 +129,9 @@ def pedidos_json(request):
             array_pedidos_id = pedidos_ids.split(',')
     
             for pedido_id in array_pedidos_id:
-                pedido = vpsa_api2.get_pedido(token_acesso, pedido_id)
-                pedidos_json.append(pedido)
+                for pedido in pedidos:
+                    if str(pedido.id) == str(pedido_id):
+                        pedidos_json.append(pedido)
 
 
 

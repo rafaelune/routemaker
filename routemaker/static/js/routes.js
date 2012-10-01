@@ -31,11 +31,39 @@ $(document).ready(function() {
             $('#my-map').data('entidade', arr[1].value);
             visual.showLoading();
         },
-        success: function() { 
+        success: function() {
+            /*$('.ui-accordion').bind('accordionchangestart', function(event, ui) {
+              ui.newHeader // jQuery object, activated header
+              ui.oldHeader // jQuery object, previous header
+              ui.newContent // jQuery object, activated content
+              ui.oldContent // jQuery object, previous content
+            });*/
+            $('#pedidos-placeholder').accordion('destroy');
+
             $('#pedidos-placeholder')
                 .accordion({
                     header: "> div > h3",
-                    active: false
+                    collapsible: true,
+                    changestart: function(event, ui) {
+                        var pedido_id = $(ui.newHeader).attr('id');
+                        var address_element = $(this).find('address');
+
+                        $.getJSON(
+                            '/cliente-pedido/', 
+                            { pedido_id: pedido_id }, 
+                            function(retorno) {
+                                if (retorno != null) {
+                                    terceiro = retorno;
+                                    html_address = '<strong>' + terceiro._Terceiro__nome + '</strong><br/>'
+                                    + terceiro._Terceiro__logradouro + ', ' + terceiro._Terceiro__bairro + '<br/>'
+                                    + terceiro._Terceiro__cidade + ' -  ' + terceiro._Terceiro__estado + ', '
+                                    + terceiro._Terceiro__pais + '<br/><a href="mailto:' 
+                                    + terceiro._Terceiro__email + '" title="Enviar e-mail">'
+                                    + terceiro._Terceiro__email + '</a>';
+                                    $(address_element).html(html_address);
+                                }
+                            });
+                    }
                 })
                 .sortable({
                     connectWith: '#selected-pedidos-placeholder',
@@ -46,13 +74,34 @@ $(document).ready(function() {
                             so trigger focusout handlers to remove .ui-state-focus
                         */
                         ui.item.children( 'h3' ).triggerHandler( 'focusout' );
+
+                        var pedido_id = ui.item.children( 'h3' ).attr('id');
+                        var address_element = $(ui.item).find('address');
+
+                        $.getJSON(
+                            '/cliente-pedido/', 
+                            { pedido_id: pedido_id }, 
+                            function(retorno) {
+                                if (retorno != null) {
+                                    terceiro = retorno;
+                                    html_address = '<strong>' + terceiro._Terceiro__nome + '</strong><br/>'
+                                    + terceiro._Terceiro__logradouro + ', ' + terceiro._Terceiro__bairro + '<br/>'
+                                    + terceiro._Terceiro__cidade + ' -  ' + terceiro._Terceiro__estado + ', '
+                                    + terceiro._Terceiro__pais + '<br/><a href="mailto:' 
+                                    + terceiro._Terceiro__email + '" title="Enviar e-mail">'
+                                    + terceiro._Terceiro__email + '</a>';
+                                    $(address_element).html(html_address);
+                                }
+                            });
                     }
                 });
             $('#pedidos-placeholder').disableSelection();
             
+            $('#selected-pedidos-placeholder').accordion('destroy');
             $('#selected-pedidos-placeholder')
                 .accordion({
-                    header: "> div > h3"
+                    header: "> div > h3",
+                    collapsible: true,
                 })
                 .sortable({
                     connectWith: '#pedidos-placeholder',
@@ -204,7 +253,7 @@ function loadTab3() {
     visual.showLoading();
 
     // get pedidos id
-    var pedidos_list = $('#selected-pedidos-placeholder .sortable-item').map(
+    var pedidos_list = $('#selected-pedidos-placeholder .sortable-item h3').map(
         function () {
             return $(this).attr('id');
         }

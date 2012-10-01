@@ -25,6 +25,9 @@ urlpatterns = patterns('',
     # Ajax retorno de pedidos em json
     (r'^pedidos/$', 'routemaker.views.pedidos_json'),
 
+    # Ajax atribui e retorna os terceiros dos pedidos em json
+    (r'^cliente-pedido/$', 'routemaker.views.cliente_endereco_json'),
+
     # Pagina principal
     (r'^home/$', 'routemaker.views.home'),
 
