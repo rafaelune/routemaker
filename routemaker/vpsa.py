@@ -314,6 +314,7 @@ class VpsaApi2(object):
         if entidades != None:
             url += '&entidades=' + entidades
 
+        print url
         request = urllib2.Request(url)
         response = urllib2.urlopen(request)
         return json.loads(response.read())
