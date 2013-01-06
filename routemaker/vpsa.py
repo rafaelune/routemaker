@@ -355,7 +355,7 @@ class VpsaApi2(object):
             terceiro = Terceiro()
             terceiro.id = response_data['id']
             terceiro.nome = response_data['nome']
-            terceiro.identificacao = response_data['identificacao']
+            terceiro.identificacao = response_data['documento']
             
             terceiro.email = response_data['emails'][0]
             
