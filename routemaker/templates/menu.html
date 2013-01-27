@@ -2,7 +2,7 @@
     <div class="navbar-inner">
         <div class="container">
             {% if is_authenticated %}
-            <a class="brand" href="{% url routemaker.views.home %}" title="P&#225;gina Inicial"><i class="logo-menu"></i>route maker</a>
+            <a class="brand" href="{% url routemaker.views.routes %}" title="P&#225;gina Inicial"><i class="logo-menu"></i>route maker</a>
             {% else %}
             <a class="brand" href="{% url routemaker.views.index %}" title="P&#225;gina Inicial"><i class="logo-menu"></i>route maker</a>
             {% endif %}
@@ -26,11 +26,11 @@
                     </li>
                     <li>
                         <a href="#">Settings</a>
-                    </li>-->
+                    </li>
                     <li>
                         <a class="cookie-delete" href="#">Delete Cookies</a>
                     </li>
-                    <li class="divider"></li>
+                    <li class="divider"></li>-->
                     <li>
                         <a href="{% url routemaker.views.log_out %}">Sair</a>
                     </li>

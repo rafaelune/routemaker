@@ -1,0 +1,86 @@
+{% extends "base-fluid.html" %}
+
+{% block title %}VPSA - Route Maker{% endblock %}
+
+{% block content %}
+<div class="row-fluid" style="padding-top: 50px;">
+    {% include "options.html" %}
+    
+    <div class="span10">
+        <div class="tabbable">
+                <ul class="nav nav-tabs tab-menu">
+                    <li class="active"><a id="lnkTab1" href="#tab1" data-toggle="tab">Etapa 1</a></li>
+                    <li class="d_n"><a id="lnkTab2" href="#tab2" data-toggle="tab">Etapa 2</a></li>
+                    <li class="d_n"><a id="lnkTab3" href="#tab3" data-toggle="tab">Etapa 3</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        <form id="filterForm" class="well form-inline">
+                            <label class="checkbox">Período:</label>
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon-calendar"></i></span><input type="text" class="input-small" rel="datepicker" placeholder="De" />
+                            </div>
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon-calendar"></i></span><input type="text" class="input-small" rel="datepicker" placeholder="Até" />
+                            </div>
+                            <button type="submit" class="btn">Buscar</button>
+                        </form>
+                        <div class="row-fluid">
+                            <ul id="pedidos-placeholder" rel="selectable" class="selectable">
+                                <li></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab2">
+                        #tab2
+                    </div>
+                    <div class="tab-pane" id="tab3">
+                        #tab3
+                    </div>
+                </div>
+
+        
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block styles %}
+<link href="{{ STATIC_URL }}css/jquery-ui-1.9.0.custom.min.css" rel="stylesheet"/>
+<style>
+.selectable .ui-selected { background: #F39814; color: white; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://raw.github.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
+<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript" src="http://malsup.github.com/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        util.createExternalLinks();
+        util.createDatePickers();
+        util.createSelectables();
+        visual.configUserMenuOptions();
+
+        var options = { 
+            target:     '#pedidos-placeholder', 
+            url:        '/empacotamento-filtro/', 
+            beforeSubmit: function(arr, $form, options) {
+                visual.showLoading();
+            },
+            success: function() {
+                visual.closeLoading();
+            }
+        }
+
+        // pass options to ajaxForm 
+        $('#filterForm').ajaxForm(options);
+    });
+</script>
+{% endblock %}

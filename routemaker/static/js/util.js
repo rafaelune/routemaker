@@ -7,6 +7,20 @@ var Util = function() {
             return false;
         });
     }
+
+    this.createDatePickers = function() {
+    	$('input[rel*=datepicker]').datepicker({
+    		dateFormat: 'dd-mm-yy'
+    	});
+    }
+
+    this.createSelectables = function() {
+    	
+    	$('ul[rel*=selectable]').bind("mousedown", function(e) {
+  			e.metaKey = true;
+		})
+		.selectable();
+    }
 };
 
 var util = new Util();

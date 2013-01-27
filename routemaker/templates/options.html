@@ -1,0 +1,19 @@
+<div class="span2">
+    <div class="box">
+        <strong class="database-user">{{ cnpj_empresa }}</strong>
+        <a href="#" title="Autenticado como {{ nome_terceiro }}">{{ nome_terceiro }}</a>
+    </div>
+    <div class="sidebar-nav">
+        <div class="well" style="padding: 8px 0;">
+            <ul class="nav nav-list">
+                <li class="nav-header">Opções</li>
+                <li class="{% if request.path == '/rotas/' %}active{% endif %}">
+                    <a href="{% url routemaker.views.routes %}" title="Criar rota">
+                        <i class="icon-map-marker"></i>
+                        Criar rota
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

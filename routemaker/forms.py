@@ -1,7 +1,7 @@
 # -*- coding: latin-1 -*-
 
 from django import forms
-from vpsa import VpsaApi2
+from routemaker.vpsaapi import *
 import re
 
 class FilterPedidoForm(forms.Form):

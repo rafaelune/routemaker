@@ -19,17 +19,20 @@ urlpatterns = patterns('',
     # Pagina de retorno callback oauth
     url(r'^callback/$', 'routemaker.views.oauth_callback', name='callback'),
 
-    # Ajax filtro de pedidos
-    (r'^filtro/$', 'routemaker.views.pedidos_search'),
-
-    # Ajax retorno de pedidos em json
-    (r'^pedidos/$', 'routemaker.views.pedidos_json'),
-
-    # Ajax atribui e retorna os terceiros dos pedidos em json
-    (r'^cliente-pedido/$', 'routemaker.views.cliente_endereco_json'),
-
     # Pagina principal
     (r'^home/$', 'routemaker.views.home'),
+
+    # Pagina criacao de rotas
+    (r'^rotas/$', 'routemaker.views.routes'),
+
+    # routes: Ajax filtro de pedidos
+    (r'^filtro/$', 'routemaker.views.pedidos_search'),
+
+    # routes: Ajax retorno de pedidos em json
+    (r'^pedidos/$', 'routemaker.views.pedidos_json'),
+
+    # routes: Ajax atribui e retorna os terceiros dos pedidos em json
+    (r'^cliente-pedido/$', 'routemaker.views.cliente_endereco_json'),
 
     # Form de login
     (r'^login/$', 'routemaker.views.log_in'),

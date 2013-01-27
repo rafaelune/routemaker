@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
 from forms import FilterPedidoForm
-from vpsa import VpsaApi2
+from routemaker.vpsaapi import *
 import jsonpickle, urllib3
 
 def index(request):
@@ -16,7 +16,7 @@ def index(request):
 
         vpsa_api2 = VpsaApi2()
         if vpsa_api2.is_token_valid(token_acesso):
-            return HttpResponseRedirect('/home/')
+            return HttpResponseRedirect('/rotas/')
         else:
             del request.session['token']
 
@@ -40,7 +40,7 @@ def oauth_callback(request):
 
     request.session['token'] = token_acesso
 
-    return HttpResponseRedirect('/home/')
+    return HttpResponseRedirect('/rotas/')
 
 def log_in(request):
     vpsa_api2 = VpsaApi2()
@@ -64,11 +64,6 @@ def home(request):
         cnpj_empresa = token_acesso.cnpj_empresa
         nome_terceiro = token_acesso.terceiro_nome
 
-        vpsa_api2 = VpsaApi2()
-        vpsa_api2.get_entidades(token_acesso)
-
-        form = FilterPedidoForm(token=token_acesso)
-
         return render_to_response('home.html', 
             locals(), 
             context_instance=RequestContext(request)
@@ -76,6 +71,26 @@ def home(request):
 
     return HttpResponseRedirect('/')
 
+def routes(request):
+    is_authenticated = request.session.has_key('token')
+    if is_authenticated:
+        token_acesso = request.session['token']
+
+        cnpj_empresa = token_acesso.cnpj_empresa
+        nome_terceiro = token_acesso.terceiro_nome
+
+        vpsa_api2 = VpsaApi2()
+        vpsa_api2.get_entidades(token_acesso)
+
+        form = FilterPedidoForm(token=token_acesso)
+
+        return render_to_response('routes.html', 
+            locals(), 
+            context_instance=RequestContext(request)
+        )
+
+    return HttpResponseRedirect('/')
+# ajax: routes
 def pedidos_search(request):
     if request.session.has_key('token') and request.method == 'POST':
         token_acesso = request.session['token']
@@ -95,7 +110,7 @@ def pedidos_search(request):
         )
     else:
         return HttpResponseRedirect('/')
-
+# ajax: routes
 def cliente_endereco_json(request):
     terceiro = None
 
@@ -115,7 +130,7 @@ def cliente_endereco_json(request):
     
     retorno = jsonpickle.encode(terceiro)
     return HttpResponse(retorno, mimetype="text/javascript")
-
+# ajax: routes
 def pedidos_json(request):
     pedidos_json = []
 
