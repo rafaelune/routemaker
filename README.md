@@ -8,6 +8,10 @@ Visite a aplicação em [routemaker-vpsa](http://routemaker-vpsa.herokuapp.com/)
 Changelog
 ---------
 
+0.1.2
+-----------------------
+* Adicionado Google Analytics
+
 0.1.1
 -----------------------
 * Integração com nova OAuth e nova api VPSA
